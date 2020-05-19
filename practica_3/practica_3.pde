@@ -26,6 +26,10 @@ PVector camPosSouth = new PVector (0, 0, 0),
 boolean recordMovieAfterEnter=false; 
 boolean recordMovieAfterEnterHasStarted=false; 
 
+curvaBezier miPrimeraBezier;
+boolean mouseClick = false;
+boolean pointgrabbed = false;
+
 void setup() {
   size(1500, 700, P3D);
   background(111);
@@ -35,7 +39,7 @@ void setup() {
   }
   
   //CODIGO DEL OSCAR
-  /*color c = color(255, 255, 0);
+  color c = color(255, 255, 0);
   PVector[] p = new PVector[4];
   p[0] = new PVector(200, 200); // BEZIER SI PASA POR EL PRIMERO
   p[1] = new PVector(300, 300); // BEZIER NO PASA POR EL SEGUNDO
@@ -45,7 +49,7 @@ void setup() {
   // PUNTOS A PINTAR?
   float num = 50;
   // LLAMADA AL CONSTRUCTOR DE LA CURVA
-  miPrimeraBezier = new curvaBezier(p, c, num);*/
+  miPrimeraBezier = new curvaBezier(p, c, num);
 }
 
 void draw() {
@@ -98,5 +102,5 @@ void draw() {
     break;
   }
   
-  //miPrimeraBezier.pintarCurva();
+  miPrimeraBezier.pintarCurva();
 }
