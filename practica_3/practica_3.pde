@@ -33,10 +33,24 @@ void setup() {
   if (bezierCamPos==null) {
     defineTwoBeziers();
   }
+  
+  //CODIGO DEL OSCAR
+  /*color c = color(255, 255, 0);
+  PVector[] p = new PVector[4];
+  p[0] = new PVector(200, 200); // BEZIER SI PASA POR EL PRIMERO
+  p[1] = new PVector(300, 300); // BEZIER NO PASA POR EL SEGUNDO
+  p[2] = new PVector(400, 200); // BEZIER NO PASA POR EL TERCERO
+  p[3] = new PVector(500, 300); // BEZIER SI PASA POR EL ULTIMO
+
+  // PUNTOS A PINTAR?
+  float num = 50;
+  // LLAMADA AL CONSTRUCTOR DE LA CURVA
+  miPrimeraBezier = new curvaBezier(p, c, num);*/
 }
 
 void draw() {
-  background(111); 
+  background(111);
+  
   camera(camPosSouth.x, camPosSouth.y, camRadiusSouth, camPosSouth.x, camPosSouth.y, 0, 0, 1, 0);
   showBeziersForEdit();
   switch (state) {
@@ -83,4 +97,6 @@ void draw() {
     bezierCamLookAt.showInMovement(); //
     break;
   }
+  
+  //miPrimeraBezier.pintarCurva();
 }
