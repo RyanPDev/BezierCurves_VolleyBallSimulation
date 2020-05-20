@@ -16,8 +16,12 @@ void keyPressedForAllOtherStates() {
     state=stateEditSouth;
     break;
 
-  case '2':
+  /*case '2':
     state=stateEditTop;
+    break;*/
+    
+  case '3':
+    state = stateShowTerrain;
     break;
   }
 }
