@@ -8,9 +8,8 @@ final int stateEditWest=2;
 final int stateShowMovie=3; 
 final int stateShowMovieWithBeziers=4;
 final int stateShowMovieLookingAhead=5;
-final int stateWaitForLoad=6; 
-final int stateWaitForSave=7; 
-final int stateHelp=8;
+final int stateShowTerrain=6;
+final int stateHelp=7;
 int state = stateEditSouth;
 
 // values for camera distance/zoom (from scene) in edit modes
@@ -29,15 +28,20 @@ boolean recordMovieAfterEnterHasStarted=false;
 curvaBezier miPrimeraBezier;
 boolean mouseClick = false;
 boolean pointgrabbed = false;
+int cols, rows;
+int scl = 10;
+int w = 500, h = 600;
 
 void setup() {
-  size(1500, 700, P3D);
+  size(800, 600, P3D);
   background(111);
+  cols = w /scl;
+  rows = h/scl;
   perspective(PI/3.0, (float) width/height, 1, 1000000);
   if (bezierCamPos==null) {
     defineTwoBeziers();
   }
-  
+
   //CODIGO DEL OSCAR
   color c = color(255, 255, 0);
   PVector[] p = new PVector[4];
@@ -54,9 +58,6 @@ void setup() {
 
 void draw() {
   background(111);
-  
-  camera(camPosSouth.x, camPosSouth.y, camRadiusSouth, camPosSouth.x, camPosSouth.y, 0, 0, 1, 0);
-  showBeziersForEdit();
   switch (state) {
   case stateEditSouth:
     // edit 
@@ -67,17 +68,42 @@ void draw() {
       camPosSouth.x, camPosSouth.y, 0, 
       0, 1, 0);
     showBeziersForEdit();//
-    break; 
-
-  case stateEditTop:
+    break;
+  /*case stateEditTop:
     // edit
-    background(111); 
+    background(0); 
     lights();
-    camera(camPosTop.x, camRadiusTop, camPosTop.z, 
-      camPosTop.x, 0, camPosTop.z, 
-      0, 0, 1);
-    showBeziersForEdit();//
-    break; 
+    camera(width/2 + 150, height/2, (height/2)/tan(PI*30/180), width/2 + 150, height/2, 0, 0, 1, 0);
+    noStroke();
+    fill(111);
+    translate(width/2, height/2);
+    rotateX(PI/3);
+    translate(-w/2, -h/2);
+    lights();
+    for (int x = 0; x < cols; x++) {
+      for (int y = 0; y < rows; y++) {        
+        rect(x*scl, y*scl, scl, scl);
+      }
+    }
+    break; */
+
+  case stateShowTerrain:
+    background(0); 
+    lights();
+    camera(width/2 + 100, height/2 + 50, (height/2)/tan(PI*30/180), width/2 + 100, height/2 + 50, 0, 0, 1, 0);
+    noStroke();
+    fill(111);
+    translate(width/2, height/2);
+    rotateX(PI/3);
+    translate(-w/2, -h/2);
+    lights();
+    for (int x = 0; x < cols; x++) {
+      for (int y = 0; y < rows; y++) {        
+        rect(x*scl, y*scl, scl, scl);
+      }
+    }
+    break;
+
 
   case stateShowMovie:
     background(111); 
@@ -101,6 +127,6 @@ void draw() {
     bezierCamLookAt.showInMovement(); //
     break;
   }
-  
-  miPrimeraBezier.pintarCurva();
+
+  //miPrimeraBezier.pintarCurva();
 }
