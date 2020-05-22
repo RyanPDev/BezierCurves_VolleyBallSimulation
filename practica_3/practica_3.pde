@@ -35,14 +35,17 @@ Phase auxiliarPhase; // Variable que guarda la fase en la que el jugador se encu
 boolean isPaused = false; // Variable de control para controlar el flujo de codigo cuando el juego está pausado
 boolean isIncreasing = false;
 
+//TERRENO
+int cols, rows, size = 20;
+
 //ZONA SETUP
 
 void setup()
 {
-  size(800,600,P3D);
+  size(800, 600, P3D);
   gamePhase = Phase.SIMULATION;
-   selectedPoint = PointSelected.NONE;
-   // Cámara
+  selectedPoint = PointSelected.NONE;
+  // Cámara
   cam = new PeasyCam(this, 50);
   cam.setMinimumDistance(50);
   cam.setMaximumDistance(2800);
@@ -51,32 +54,35 @@ void setup()
 
   cameraPhase = CamPhase.COURT;
   updateCameraLookAt();
-  
+
   lights();
-  
-  
-  color c = color(255,255,0);
+  color c = color(255, 255, 0);
   PVector[] p = new PVector[4];
-  p[0] = new PVector(200,-200, 200); // BEZIER SI PASA POR EL PRIMERO
-  p[1] = new PVector(200,-200, 400); // BEZIER NO PASA POR EL SEGUNDO
-  p[2] = new PVector(200,-200, 800); // BEZIER NO PASA POR EL TERCERO
-  p[3] = new PVector(200,0, 1000); // BEZIER SI PASA POR EL ULTIMO
-  
+  p[0] = new PVector(200, -200, 200); // BEZIER SI PASA POR EL PRIMERO
+  p[1] = new PVector(200, -200, 400); // BEZIER NO PASA POR EL SEGUNDO
+  p[2] = new PVector(200, -200, 800); // BEZIER NO PASA POR EL TERCERO
+  p[3] = new PVector(200, 0, 1000); // BEZIER SI PASA POR EL ULTIMO
+
   // PUNTOS A PINTAR?
   float num = 50;
   // LLAMADA AL CONSTRUCTOR DE LA CURVA
   miPrimeraBezier = new curvaBezier(p, c, num);
+
+  cols = width/size;
+  rows = height/size;
 }
 //ZONA DRAW
 
 void draw()
 {
-   background(255);
-   
-   miPrimeraBezier.pintarCurva();
-   
-   drawHUD();
-   
+  background(255);
+
+  miPrimeraBezier.pintarCurva();
+
+  drawHUD();
+
+  //TERRENO
+  drawCourt();
 }
 void mouseDragged()
 {
@@ -84,30 +90,30 @@ void mouseDragged()
   shouldModify = true;
   switch(selectedPoint)
   {
-      case FIRST:
-        point = 1;
-        break;
-      case SECOND:
-        point = 2;
-        break;
-      case LAST:
-        point = 3;
-        break;
-      default:
-        shouldModify = false;
-        break;
+  case FIRST:
+    point = 1;
+    break;
+  case SECOND:
+    point = 2;
+    break;
+  case LAST:
+    point = 3;
+    break;
+  default:
+    shouldModify = false;
+    break;
   }
-  
-  if(!mouseClick)
+
+  if (!mouseClick)
   {
-      mouseClick = true;
-      miPrimeraBezier.lastMouseInput = new PVector(mouseX,mouseY,0);
+    mouseClick = true;
+    miPrimeraBezier.lastMouseInput = new PVector(mouseX, mouseY, 0);
   }
-  if(!freeCam && shouldModify)
-    miPrimeraBezier.moveControlPointsMouse(new PVector(mouseX,mouseY,0),point);
+  if (!freeCam && shouldModify)
+    miPrimeraBezier.moveControlPointsMouse(new PVector(mouseX, mouseY, 0), point);
 }
 void mouseReleased()
 {
-  if(mouseClick)
+  if (mouseClick)
     mouseClick = false;
 }
