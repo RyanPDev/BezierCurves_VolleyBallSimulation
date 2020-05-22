@@ -1,8 +1,9 @@
 void drawCourt() {
 
   noStroke();
-  fill(244, 164, 96);
-
+  fill(244, 164, 96); 
+  pushMatrix();
+  
   translate(width/2, height/2);
   rotateX(PI/3);
 
@@ -13,4 +14,6 @@ void drawCourt() {
       rect(y*size, x*size, size, size);
     }
   }
+  
+  popMatrix();
 }
