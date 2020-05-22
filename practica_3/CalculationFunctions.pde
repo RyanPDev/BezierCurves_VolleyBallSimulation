@@ -10,7 +10,6 @@ float calculateModuleVector(PVector vector) //Calcula un vector unitario entre d
   if (calculatedVector != 0) // Prevenimos que no se haga la raiz cuadrada de 0
   {
     module = sqrt(calculatedVector);
-
   }
 
   return module;
@@ -62,14 +61,14 @@ PVector calculateUnitVector(PVector pos1, PVector pos2) //Calcula un vector unit
 
 
 // Rotate a vector in 3D
-void rotate3D(PVector v,float magnitud, float theta) {
-  
+void rotate3D(PVector v, float magnitud, float theta) {
+
   // What's the angle?
   float a = v.heading();
-  
+
   // Change the angle
   a += theta;
-  
+
   // Polar to cartesian for the new xy components
   v.x = magnitud * cos(a);
   v.y = magnitud * sin(a);
