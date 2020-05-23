@@ -37,56 +37,60 @@ class curvaBezier {
       coeficientes[i]= new PVector(0, 0, 0);
 
       // COPIAR LOS PUNTOS
-      puntosDeControl[i] = pc[i];
+      puntosDeControl[i].x = pc[i].x;
+      puntosDeControl[i].y = pc[i].y;
+      puntosDeControl[i].z = pc[i].z;
+      
       initialPoint[i].x = puntosDeControl[i].x;
       initialPoint[i].y = puntosDeControl[i].y;
       initialPoint[i].z = puntosDeControl[i].z;
       
-      rearrangeMaxMin(i);
+      
       //ALMACENAMOS EL RESTO
       colorCurva = c;
 
       numeroDePuntosAPintar = num;
     }
+    rearrangeMaxMin();
     calculoCoefs();
   }
   
-  void rearrangeMaxMin(int i)
+  void rearrangeMaxMin()
   {
-    if (i == 1)
-      {
-        maxPosPoint[i].x = puntosDeControl[i].x + movingLimit;
-        maxPosPoint[i].y = puntosDeControl[i].y + movingLimit;
+    
+       PVector firstLastDistance = new PVector(0,0,0);
+       
+        maxPosPoint[1].x = puntosDeControl[1].x + movingLimit;
+        maxPosPoint[1].y = puntosDeControl[1].y + movingLimit;
 
-        minPosPoint[i].x = puntosDeControl[i].x - movingLimit;
-        minPosPoint[i].y = puntosDeControl[i].y - movingLimit;
+        minPosPoint[1].x = puntosDeControl[1].x - movingLimit;
+        minPosPoint[1].y = puntosDeControl[1].y - movingLimit;
      
-      } 
-      else if(i == 2)
-      {
+    
          maxPosPoint[2].x = puntosDeControl[1].x + movingLimit;
          minPosPoint[2].x = puntosDeControl[1].x - movingLimit; 
          
          
          maxPosPoint[2].y = puntosDeControl[1].y + movingLimit;
          minPosPoint[2].y = puntosDeControl[1].y - movingLimit; 
-      }
+     
+        maxPosPoint[3].x = puntosDeControl[2].x;
+        maxPosPoint[3].z = courtPos.z + (courtSize.z/2);
+        maxPosPoint[3].y = puntosDeControl[2].y + 100;
+        
+        minPosPoint[3].x = puntosDeControl[2].x;
+        minPosPoint[3].z = courtPos.z;
+        minPosPoint[3].y = puntosDeControl[2].y + 100;
+        
+        firstLastDistance.z = (puntosDeControl[3].z - puntosDeControl[0].z);
+       
+        maxPosPoint[1].z = puntosDeControl[0].z + (firstLastDistance.z / 4);
+        maxPosPoint[1].z = puntosDeControl[0].z + (firstLastDistance.z / 4);
+        
+        maxPosPoint[2].z = puntosDeControl[0].z + ((3* firstLastDistance.z) / 4);
+        minPosPoint[2].z = puntosDeControl[0].z + ((3* firstLastDistance.z) / 4);       
       
-      else if(i == 3)
-      {
-        maxPosPoint[i].x = puntosDeControl[2].x;
-        maxPosPoint[i].z = courtPos.z + (courtSize.z/2);
-        maxPosPoint[i].y = puntosDeControl[2].y + 100;
-        
-        minPosPoint[i].x = puntosDeControl[2].x;
-        minPosPoint[i].z = courtPos.z;
-        minPosPoint[i].y = puntosDeControl[2].y + 100;
-        
-        maxPosPoint[1].z = (puntosDeControl[i].z + puntosDeControl[0].z) / 4;
-        minPosPoint[1].z = (puntosDeControl[i].z + puntosDeControl[0].z) / 4;
-        maxPosPoint[2].z = ((puntosDeControl[i].z + puntosDeControl[0].z)*3) / 4;
-        minPosPoint[2].z = ((puntosDeControl[i].z + puntosDeControl[0].z)*3) / 4;        
-      }
+     
       
   }
   //METODOS
@@ -114,7 +118,8 @@ class curvaBezier {
     float[] camPos = cam.getPosition();  // x, y, and z coordinates of camera in model space
     //  float[] camRot = cam.getRotations(); // x, y, and z rotations required to face camera in model spac
     float moduleMovementVec;
-    int reverseDirection = 1;
+    int reverseDirectionZ = 1;
+    int reverseDirectionX = 1;
     // PVector cameraPosition = new PVector(0, 0, 0);
     //PVector camaraAPunto = new PVector(0, 0, 0);
     PVector movimientoPunto = new PVector(0, 0, 0);
@@ -128,7 +133,11 @@ class curvaBezier {
 
     if (puntosDeControl[point].z < camPos[2])
     {
-      reverseDirection = -1;
+      reverseDirectionZ = -1;
+    }
+    if (puntosDeControl[point].x < camPos[0])
+    {
+      reverseDirectionX = -1;
     }
 
     movimientoPunto = calculateVector(mousePosition, lastMouseInput);
@@ -143,14 +152,14 @@ class curvaBezier {
       if (point != 3)
       {
 
-        puntosDeControl[point].x += movimientoPunto.x * reverseDirection;
+        puntosDeControl[point].x += movimientoPunto.x * reverseDirectionZ;
         puntosDeControl[point].y -= movimientoPunto.y;
-        puntosDeControl[point].z = puntosDeControl[point].z;
+        //puntosDeControl[point].z = puntosDeControl[point].z;
       } else
       {
-        puntosDeControl[point].x += movimientoPunto.x * reverseDirection;
-        puntosDeControl[point].y = puntosDeControl[point].y;
-        puntosDeControl[point].z += movimientoPunto.y  * reverseDirection;
+       // puntosDeControl[point].x = puntosDeControl[point].x;
+       //// puntosDeControl[point].y = puntosDeControl[point].y;
+        puntosDeControl[point].z += movimientoPunto.y  * reverseDirectionX;
       }
       
       rearrangePoints();
@@ -175,10 +184,9 @@ class curvaBezier {
   
   void rearrangePoints()
   {
-    for(int point = 1; point < 4; point++)
-    {
-      rearrangeMaxMin(point);
-    }
+    
+     rearrangeMaxMin();
+    
     for(int point = 1; point < 4; point++)
     {
       if (puntosDeControl[point].x > maxPosPoint[point].x)
@@ -213,7 +221,7 @@ class curvaBezier {
    
     fill(200, 0, 0, 50); // semi-transparent
     stroke(10);
-
+/*
     pushMatrix();
 
     switch(selectedPoint)
@@ -236,7 +244,7 @@ class curvaBezier {
     }
     
     popMatrix();
-
+*/
     fill(0, 255);
     //NECESITO UN PUNTO
     PVector punto = new PVector(0, 0, 0);
