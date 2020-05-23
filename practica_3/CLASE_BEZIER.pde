@@ -41,7 +41,7 @@ class curvaBezier {
       initialPoint[i].x = puntosDeControl[i].x;
       initialPoint[i].y = puntosDeControl[i].y;
       initialPoint[i].z = puntosDeControl[i].z;
-      if (i != 3)
+      if (i == 1)
       {
         maxPosPoint[i].x = puntosDeControl[i].x + movingLimit;
         maxPosPoint[i].y = puntosDeControl[i].y + movingLimit;
@@ -50,7 +50,12 @@ class curvaBezier {
         minPosPoint[i].y = puntosDeControl[i].y - movingLimit;
         maxPosPoint[i].z = puntosDeControl[i].z;
         minPosPoint[i].z = puntosDeControl[i].z;
-      } else
+      } 
+      else if(i == 1)
+      {
+         calcSpinLimit();
+      }
+      else
       {
         maxPosPoint[i].x = puntosDeControl[i].x + movingLimit;
         maxPosPoint[i].z = puntosDeControl[i].z + movingLimit;
@@ -68,7 +73,18 @@ class curvaBezier {
     }
     calculoCoefs();
   }
-
+  void calcSpinLimit()
+  {
+          maxPosPoint[2].x = puntosDeControl[1].x + movingLimit;
+          minPosPoint[2].x = puntosDeControl[1].x - movingLimit; 
+       if (puntosDeControl[2].x > maxPosPoint[2].x)
+      {
+        puntosDeControl[2].x =  maxPosPoint[2].x;
+      } else if (puntosDeControl[2].x < minPosPoint[2].x)
+      {
+        puntosDeControl[2].x =  minPosPoint[2].x;
+      }
+  }
   //METODOS
   void calculoCoefs()
   {
@@ -132,7 +148,7 @@ class curvaBezier {
         puntosDeControl[point].y = puntosDeControl[point].y;
         puntosDeControl[point].z += movimientoPunto.y  * reverseDirection;
       }
-
+      calcSpinLimit();
       if (puntosDeControl[point].x > maxPosPoint[point].x)
       {
         puntosDeControl[point].x =  maxPosPoint[point].x;
@@ -154,7 +170,7 @@ class curvaBezier {
       {
         puntosDeControl[point].z =  minPosPoint[point].z;
       }
-
+      
       calculoCoefs();
       lastMouseInput.x = mousePosition.x;
       lastMouseInput.y = mousePosition.y;
@@ -179,7 +195,7 @@ class curvaBezier {
 
     // strokeWeight(1);
     // fill(205, 255, 255, 0);
-    hint(DISABLE_DEPTH_TEST);
+   
     fill(200, 0, 0, 50); // semi-transparent
     stroke(10);
 
@@ -203,7 +219,7 @@ class curvaBezier {
 
       break;
     }
-
+    
     popMatrix();
 
     fill(0, 255);
@@ -225,16 +241,18 @@ class curvaBezier {
       stroke(0, 0, 255);
       line(0, 0, 0, 0, 0, 100);
       popMatrix();
+       
     }
-
+    
     // Defino como pintar
     stroke(colorCurva);
     //ME desplazo por la curva desde u = 0 hasta u igual a 1
     float incrementoU = 1.0 / numeroDePuntosAPintar;
-    for (float u= 0; u<= 1; u += incrementoU)
+    for (float u= 0; u<= 4; u += incrementoU)
     {
       punto = calculameUnPunto(u); 
       point(punto.x, punto.y, punto.z);
     }
+   
   }
 }
