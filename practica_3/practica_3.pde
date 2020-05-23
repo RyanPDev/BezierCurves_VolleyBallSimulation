@@ -9,6 +9,14 @@ curvaBezier miPrimeraBezier;
 boolean mouseClick = false;
 boolean pointgrabbed = false;
 
+// GameVariables
+PVector courtPos,courtSize, floorSize, courtInitPos;
+float playerHeight;
+
+PVector recievingPoint, destinationPoint, secondRecievingPoint,ThirdRecievingPoint;
+float reciviengHeight;
+
+
 //Cámara
 PGraphics3D g3;
 PeasyCam cam;
@@ -27,6 +35,9 @@ PointSelected selectedPoint;
 boolean shouldModify;
 boolean changedSelectedObject = false;
 
+
+
+
 enum Phase {
   STARTING, SIMULATION, PAUSE
 }; // Enumerador con los diferentes estados de la partida
@@ -35,8 +46,7 @@ Phase auxiliarPhase; // Variable que guarda la fase en la que el jugador se encu
 boolean isPaused = false; // Variable de control para controlar el flujo de codigo cuando el juego está pausado
 boolean isIncreasing = false;
 
-//TERRENO
-int cols, rows, size = 20;
+
 
 //ZONA SETUP
 
@@ -46,44 +56,62 @@ void setup()
   gamePhase = Phase.SIMULATION;
   selectedPoint = PointSelected.NONE;
   // Cámara
-  cam = new PeasyCam(this, 50);
+  cam = new PeasyCam(this, 2800);
   cam.setMinimumDistance(50);
   cam.setMaximumDistance(2800);
-
+  cam.rotateX(45);  // rotate around the z-axis passing through the subject
+  // cam.rotateZ(180);  // rotate around the z-axis passing through the subject
+  
   animationTimeInMillis = 1000;
 
   cameraPhase = CamPhase.COURT;
-  updateCameraLookAt();
+  
+  courtPos = new PVector(0,0,0);
+  floorSize = new PVector(0,0,0); 
+  courtSize = new PVector(900,1,1800);
+  
+  courtInitPos = new PVector (0,0,0);
+  courtInitPos.x = courtPos.x- (courtSize.x/2);
+  courtInitPos.y = courtPos.y- (courtSize.y/2);
+  courtInitPos.z = courtPos.z- (courtSize.z/2);
+  
+  floorSize.x = courtSize.x*1.5;
+  floorSize.y = courtSize.y * 0.5;
+  floorSize.z = courtSize.z*1.5;
 
   lights();
   color c = color(255, 255, 0);
   PVector[] p = new PVector[4];
-  p[0] = new PVector(200, -200, 200); // BEZIER SI PASA POR EL PRIMERO
-  p[1] = new PVector(200, -200, 400); // BEZIER NO PASA POR EL SEGUNDO
-  p[2] = new PVector(200, -200, 800); // BEZIER NO PASA POR EL TERCERO
-  p[3] = new PVector(200, 0, 1000); // BEZIER SI PASA POR EL ULTIMO
+  p[0] = new PVector(courtInitPos.x, -200, courtInitPos.z); // BEZIER SI PASA POR EL PRIMERO
+  p[1] = new PVector(courtInitPos.x +100, -250, courtInitPos.z + courtSize.z / 3); // BEZIER NO PASA POR EL SEGUNDO
+  p[2] = new PVector(courtInitPos.x +100, -270, courtInitPos.z + ( 2* courtSize.z / 3)); // BEZIER NO PASA POR EL TERCERO
+  p[3] = new PVector(courtInitPos.x +100, -100, courtInitPos.z + ( 2* courtSize.z / 3) + 200); // BEZIER SI PASA POR EL ULTIMO
 
   // PUNTOS A PINTAR?
   float num = 50;
   // LLAMADA AL CONSTRUCTOR DE LA CURVA
   miPrimeraBezier = new curvaBezier(p, c, num);
 
-  cols = width/size;
-  rows = height/size;
+  
+  
+  updateCameraLookAt();
+ // cam.setPitchRotationMode();
 }
 //ZONA DRAW
 
 void draw()
 {
   background(255);
-   
+
 
   miPrimeraBezier.pintarCurva();
 
-  drawHUD();
-
   //TERRENO
   drawCourt();
+  
+  
+  drawHUD();
+
 }
 void mouseDragged()
 {
