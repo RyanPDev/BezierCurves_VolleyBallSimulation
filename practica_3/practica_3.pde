@@ -28,7 +28,7 @@ boolean freeCam = true;
 long animationTimeInMillis; // Tiempo que tarda la camara en alcanzar el objetivo a mirar
 
 enum PointSelected {
-  NONE, FIRST, SECOND, LAST;
+  NONE, DIRECCION, EFECTO, POTENCIA;
 };
 
 PointSelected selectedPoint;
@@ -92,7 +92,7 @@ void setup()
   // LLAMADA AL CONSTRUCTOR DE LA CURVA
   miPrimeraBezier = new curvaBezier(p, c, num);
 
-  
+  miPrimeraBezier.rearrangePoints();    
   
   updateCameraLookAt();
  // cam.setPitchRotationMode();
@@ -119,13 +119,13 @@ void mouseDragged()
   shouldModify = true;
   switch(selectedPoint)
   {
-  case FIRST:
+  case DIRECCION:
     point = 1;
     break;
-  case SECOND:
+  case EFECTO:
     point = 2;
     break;
-  case LAST:
+  case POTENCIA:
     point = 3;
     break;
   default:

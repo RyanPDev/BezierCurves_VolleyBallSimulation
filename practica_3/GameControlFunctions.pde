@@ -16,18 +16,18 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
     if (!changedSelectedObject)
     {
       changedSelectedObject = true;
-      if (selectedPoint == PointSelected.FIRST)
+      if (selectedPoint == PointSelected.DIRECCION)
       {
-        selectedPoint = PointSelected.SECOND;
-      } else if (selectedPoint == PointSelected.SECOND)
+        selectedPoint = PointSelected.EFECTO;
+      } else if (selectedPoint == PointSelected.EFECTO)
       {
-        selectedPoint = PointSelected.LAST;
-      } else if (selectedPoint == PointSelected.LAST)
+        selectedPoint = PointSelected.POTENCIA;
+      } else if (selectedPoint == PointSelected.POTENCIA)
       {
         selectedPoint = PointSelected.NONE;
       } else if (selectedPoint == PointSelected.NONE)
       {
-        selectedPoint = PointSelected.FIRST;
+        selectedPoint = PointSelected.DIRECCION;
       }
     }
   }
