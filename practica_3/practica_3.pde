@@ -15,7 +15,9 @@ float playerHeight, antenaHeight, antenaSize, courtLinesSize, distanceCenterAnte
 int rows, cols, scl;
 
 PVector recievingPoint, destinationPoint, secondRecievingPoint,ThirdRecievingPoint;
-float reciviengHeight;
+float reciviengHeight, ballSize;
+
+
 
 
 //Cámara
@@ -40,15 +42,21 @@ boolean changedSelectedObject = false;
 
 
 enum Phase {
-  STARTING, SIMULATION, PAUSE
+  STARTING, SIMULATION, PAUSE, SERVE
 }; // Enumerador con los diferentes estados de la partida
 Phase gamePhase; // La fase actual en la que se encuentra el juego
 Phase auxiliarPhase; // Variable que guarda la fase en la que el jugador se encuentra cuando le da al pause
-boolean isPaused = false; // Variable de control para controlar el flujo de codigo cuando el juego está pausado
+boolean isServing = false; // Variable de control para controlar el flujo de codigo cuando el juego está pausado
 boolean isIncreasing = false;
 
 
-
+ boolean curveInGame = true;
+ int iteracionDeBola = 50;
+ PVector puntoBola = new PVector(0, 0, 0);
+ float incrementoBolaU = 1.0 /  iteracionDeBola;
+ float u = 0;
+ color ballColor = color(255,224,60);
+ int ballCollided = 0;
 //ZONA SETUP
 
 void setup()
@@ -62,7 +70,7 @@ void setup()
   cam.setMaximumDistance(2800);
   cam.rotateX(45);  // rotate around the z-axis passing through the subject
   // cam.rotateZ(180);  // rotate around the z-axis passing through the subject
-  
+  ballSize = 65;
   animationTimeInMillis = 1000;
 
   cameraPhase = CamPhase.COURT;
@@ -110,14 +118,63 @@ void draw()
 {
   background(255);
 
-
-  miPrimeraBezier.pintarCurva();
-
+  if(gamePhase == Phase.SIMULATION)
+  {
+    miPrimeraBezier.pintarCurva();
+  }
+  else if(gamePhase == Phase.SERVE)
+  {
+     serveBall();
+  }
   //TERRENO
   drawCourt();  
   
   drawHUD();
 }
+
+void serveBall()
+{
+      
+      pushMatrix();
+      switch(ballCollided)
+      {
+        case 0:
+          stroke(ballColor);
+          break;
+        case 1:
+           stroke(0,0,255);
+          break;
+        case 2:
+           stroke(255,0,0);
+          break;
+        default:
+          break;
+      }
+      
+      puntoBola =  miPrimeraBezier.calculameUnPunto(u);  
+      if( puntoBola.z < 20 && puntoBola.z > -20 && puntoBola.y >= -antenaHeight)
+      {
+          stroke(0,0,255);
+          ballCollided = 1;
+      }
+      if(puntoBola.y >= 0)
+      {
+          stroke(255,0,0);
+          
+          ballCollided = 2;
+      }
+        translate(puntoBola.x, puntoBola.y, puntoBola.z);
+        sphere(ballSize);
+           u+= incrementoBolaU;
+      if ( u > 4) {
+        stopServing();
+      }
+    
+      popMatrix();
+      
+   
+}
+
 
 void mouseDragged()
 {
