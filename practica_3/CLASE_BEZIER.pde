@@ -20,7 +20,7 @@ class curvaBezier {
     maxPosPoint = new PVector[4];
     minPosPoint = new PVector[4];
     initialPoint = new PVector[4];
-    
+
     //INICIALIZAMOS EL ARRAY DE CORFICIENTES
     coeficientes = new PVector[4];
     movingLimit = 250;
@@ -91,7 +91,7 @@ class curvaBezier {
 
   void moveControlPointsMouse(PVector mousePosition, int point)
   {
-      float[] camPos = cam.getPosition();  // x, y, and z coordinates of camera in model space
+    float[] camPos = cam.getPosition();  // x, y, and z coordinates of camera in model space
     //  float[] camRot = cam.getRotations(); // x, y, and z rotations required to face camera in model spac
     float moduleMovementVec;
     int reverseDirection = 1;
@@ -105,12 +105,12 @@ class curvaBezier {
      cameraPosition.z = camPos[2];  
      */
     //  camaraAPunto = calculateVector(cameraPosition, puntosDeControl[point]);
-    
-    if(puntosDeControl[point].z < camPos[2])
+
+    if (puntosDeControl[point].z < camPos[2])
     {
-        reverseDirection = -1;
+      reverseDirection = -1;
     }
-    
+
     movimientoPunto = calculateVector(mousePosition, lastMouseInput);
 
     //movimientoPunto = calculateUnitVector(mousePosition,lastMouseInput);
@@ -176,34 +176,34 @@ class curvaBezier {
 
   void pintarCurva()
   {
-    
-   // strokeWeight(1);
-   // fill(205, 255, 255, 0);
-   hint(DISABLE_DEPTH_TEST);
-    fill(200,0,0,50); // semi-transparent
+
+    // strokeWeight(1);
+    // fill(205, 255, 255, 0);
+    hint(DISABLE_DEPTH_TEST);
+    fill(200, 0, 0, 50); // semi-transparent
     stroke(10);
-    
+
     pushMatrix();
-    
-      switch(selectedPoint)
-      {
-      case FIRST:
-        translate(initialPoint[1].x,initialPoint[1].y,initialPoint[1].z);
-        box(movingLimit * 2,movingLimit * 2,1);
-        break;
-      case SECOND:
-        translate(initialPoint[2].x,initialPoint[2].y,initialPoint[2].z);
-        box(movingLimit*2,movingLimit*2,1);
-        break;
-      case LAST:
-        translate(initialPoint[3].x,initialPoint[3].y,initialPoint[3].z);
-        box(movingLimit*2,1,movingLimit*2);
-        break;
-      default:
-       
-        break;
-      }
-    
+
+    switch(selectedPoint)
+    {
+    case FIRST:
+      translate(initialPoint[1].x, initialPoint[1].y, initialPoint[1].z);
+      box(movingLimit * 2, movingLimit * 2, 1);
+      break;
+    case SECOND:
+      translate(initialPoint[2].x, initialPoint[2].y, initialPoint[2].z);
+      box(movingLimit*2, movingLimit*2, 1);
+      break;
+    case LAST:
+      translate(initialPoint[3].x, initialPoint[3].y, initialPoint[3].z);
+      box(movingLimit*2, 1, movingLimit*2);
+      break;
+    default:
+
+      break;
+    }
+
     popMatrix();
 
     fill(0, 255);
@@ -216,14 +216,14 @@ class curvaBezier {
       punto = puntosDeControl[i];
 
       pushMatrix();
-        translate(punto.x, punto.y, punto.z);
-        point(0, 0, 0);
-        stroke(255, 0, 0);
-        line(0, 0, 0, 100, 0, 0);
-        stroke(0, 255, 0);
-        line(0, 0, 0, 0, -100, 0);
-        stroke(0, 0, 255);
-        line(0, 0, 0, 0, 0, 100);
+      translate(punto.x, punto.y, punto.z);
+      point(0, 0, 0);
+      stroke(255, 0, 0);
+      line(0, 0, 0, 100, 0, 0);
+      stroke(0, 255, 0);
+      line(0, 0, 0, 0, -100, 0);
+      stroke(0, 0, 255);
+      line(0, 0, 0, 0, 0, 100);
       popMatrix();
     }
 
