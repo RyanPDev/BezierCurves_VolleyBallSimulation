@@ -11,7 +11,7 @@ boolean pointgrabbed = false;
 
 // GameVariables
 PVector courtPos,courtSize, floorSize, courtInitPos;
-float playerHeight;
+float playerHeight, antenaHeight, antenaSize, courtLinesSize, distanceCenterAntena;
 
 PVector recievingPoint, destinationPoint, secondRecievingPoint,ThirdRecievingPoint;
 float reciviengHeight;
@@ -28,7 +28,7 @@ boolean freeCam = true;
 long animationTimeInMillis; // Tiempo que tarda la camara en alcanzar el objetivo a mirar
 
 enum PointSelected {
-  NONE, FIRST, SECOND, LAST;
+  NONE, DIRECCION, EFECTO, POTENCIA;
 };
 
 PointSelected selectedPoint;
@@ -78,6 +78,11 @@ void setup()
   floorSize.x = courtSize.x*1.5;
   floorSize.y = courtSize.y * 0.5;
   floorSize.z = courtSize.z*1.5;
+  
+  antenaHeight = 243;
+  antenaSize = 25;
+  courtLinesSize = 25;
+  distanceCenterAntena = 1097/2;
 
   lights();
   color c = color(255, 255, 0);
@@ -92,7 +97,7 @@ void setup()
   // LLAMADA AL CONSTRUCTOR DE LA CURVA
   miPrimeraBezier = new curvaBezier(p, c, num);
 
-  
+  miPrimeraBezier.rearrangePoints();    
   
   updateCameraLookAt();
  // cam.setPitchRotationMode();
@@ -107,25 +112,24 @@ void draw()
   miPrimeraBezier.pintarCurva();
 
   //TERRENO
-  drawCourt();
-  
+  drawCourt();  
   
   drawHUD();
-
 }
+
 void mouseDragged()
 {
   int point = 0;
   shouldModify = true;
   switch(selectedPoint)
   {
-  case FIRST:
+  case DIRECCION:
     point = 1;
     break;
-  case SECOND:
+  case EFECTO:
     point = 2;
     break;
-  case LAST:
+  case POTENCIA:
     point = 3;
     break;
   default:
