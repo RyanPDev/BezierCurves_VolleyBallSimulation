@@ -1,19 +1,19 @@
 void drawCourt() {
 
-  noStroke();
-  fill(244, 164, 96); 
+  
   pushMatrix();
   
-  translate(width/2, height/2);
-  rotateX(PI/3);
+  translate(courtPos.x,courtPos.y,courtPos.z);
 
-  translate(-width/2, -height/2);
-
-  for (int x = 0; x < rows; x++) {
-    for (int y = 0; y < cols; y++) {
-      rect(y*size, x*size, size, size);
-    }
-  }
+  stroke(255);
+  strokeWeight(8);
+  fill(244, 164, 96); 
+  
+  box(courtSize.x,courtSize.y,courtSize.z);
+  
+  fill(255, 204, 0); 
+  box(floorSize.x,floorSize.y,floorSize.z);
+  
   
   popMatrix();
 }
