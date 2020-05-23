@@ -12,6 +12,7 @@ boolean pointgrabbed = false;
 // GameVariables
 PVector courtPos,courtSize, floorSize, courtInitPos;
 float playerHeight, antenaHeight, antenaSize, courtLinesSize, distanceCenterAntena;
+int rows, cols, scl;
 
 PVector recievingPoint, destinationPoint, secondRecievingPoint,ThirdRecievingPoint;
 float reciviengHeight;
@@ -83,6 +84,7 @@ void setup()
   antenaSize = 25;
   courtLinesSize = 25;
   distanceCenterAntena = 1097/2;
+  scl = 26;
 
   lights();
   color c = color(255, 255, 0);
