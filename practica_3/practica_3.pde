@@ -11,7 +11,7 @@ boolean pointgrabbed = false;
 
 // GameVariables
 PVector courtPos,courtSize, floorSize, courtInitPos;
-float playerHeight;
+float playerHeight, antenaHeight, antenaSize, courtLinesSize, distanceCenterAntena;
 
 PVector recievingPoint, destinationPoint, secondRecievingPoint,ThirdRecievingPoint;
 float reciviengHeight;
@@ -78,6 +78,11 @@ void setup()
   floorSize.x = courtSize.x*1.5;
   floorSize.y = courtSize.y * 0.5;
   floorSize.z = courtSize.z*1.5;
+  
+  antenaHeight = 243;
+  antenaSize = 25;
+  courtLinesSize = 25;
+  distanceCenterAntena = 1097/2;
 
   lights();
   color c = color(255, 255, 0);
@@ -107,12 +112,11 @@ void draw()
   miPrimeraBezier.pintarCurva();
 
   //TERRENO
-  drawCourt();
-  
+  drawCourt();  
   
   drawHUD();
-
 }
+
 void mouseDragged()
 {
   int point = 0;
