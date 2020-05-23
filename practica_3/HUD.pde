@@ -5,7 +5,7 @@ void drawHUD() // Funcion que dibuja HUD
 
 
   strokeWeight(1);
-  //fill(205, 255, 255, 150);
+
   rectMode(CORNERS);
 
 
@@ -15,7 +15,7 @@ void drawHUD() // Funcion que dibuja HUD
   textAlign(CENTER, CENTER);
   textSize(15); 
   fill(0);
-  if (selectedPoint == PointSelected.FIRST)
+  if (selectedPoint == PointSelected.DIRECCION)
   {
     textSize(22);
     fill(0, 255, 0);
@@ -25,7 +25,7 @@ void drawHUD() // Funcion que dibuja HUD
   textSize(15);
   fill(0);
 
-  if (selectedPoint == PointSelected.SECOND)
+  if (selectedPoint == PointSelected.EFECTO)
   {
     textSize(22);
     fill(255, 0, 0);
@@ -35,7 +35,7 @@ void drawHUD() // Funcion que dibuja HUD
   textSize(15);
   fill(0);
 
-  if (selectedPoint == PointSelected.LAST)
+  if (selectedPoint == PointSelected.POTENCIA)
   {
     textSize(22);
     fill(255, 192, 203 );
