@@ -223,7 +223,8 @@ class curvaBezier {
   void pintarCurva()
   {
    
-
+    if(!freeCam)
+    {
     fill(200, 0, 0, 50); // semi-transparent
     stroke(10);
     /*
@@ -271,8 +272,7 @@ class curvaBezier {
       line(0, 0, 0, 0, 0, 100);
       popMatrix();
     }
-     if(printCurves)
-    {
+     
     // Defino como pintar
     stroke(colorCurva);
     //ME desplazo por la curva desde u = 0 hasta u igual a 1
