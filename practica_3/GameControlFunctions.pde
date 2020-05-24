@@ -20,6 +20,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
     if (!isServing) {
       isServing = true;
       auxiliarPhase = gamePhase;
+      ballCollided = 0;
       gamePhase = Phase.SERVE;
     } else{
 
@@ -71,8 +72,10 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
 
 void stopServing()
 {
+   
   gamePhase = auxiliarPhase;
   isServing = false;
+  //ballFellTime = millis();
   curveInGame = true;
   ballInGame = true;
   ballCollided = 0;
