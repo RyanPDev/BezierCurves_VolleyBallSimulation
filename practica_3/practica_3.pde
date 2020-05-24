@@ -113,16 +113,13 @@ void draw()
   translate(puntoBola.x, puntoBola.y, puntoBola.z);
   shape(ball);
   popMatrix();
-  
+
   drawCourt();
   drawHUD();
 }
 
 void serveBall()
 {
-
-  
-
   switch(ballCollided)
   {
   case 0:
@@ -153,7 +150,7 @@ void serveBall()
       puntoBola =  miPrimeraBezier.calculameUnPunto(u); 
       if (millis() - ballFellTime >= timeForReset)
       {
-       
+
         stopServing();
       }
     }
@@ -162,9 +159,9 @@ void serveBall()
     if (!ballSpiked)
     {
       puntoBola = recieveCurve.calculameUnPunto(u);
-      if(u > 0.7)
+      if (u > 0.7)
       {
-         arrayPlayers[7].makeJump = true; 
+        arrayPlayers[7].makeJump = true;
       }
     } else
     {
@@ -189,7 +186,7 @@ void serveBall()
   }
   // fill(ballColor);
 
-  
+
   u+= incrementoBolaU;
 
   if ( u > 4 || ( !ballInGame && u > 1)) {
@@ -197,19 +194,15 @@ void serveBall()
     {
       u = 0;
       calcSpikeCurve();
-      
+
       ballSpiked = true;
       iteracionDeBola = 20;
       incrementoBolaU = 1.0 /  iteracionDeBola;
-    }
-    
-    else
+    } else
     {
       stopServing();
     }
   }
-
-  
 }
 
 
