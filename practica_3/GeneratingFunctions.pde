@@ -4,6 +4,7 @@ void initGame()
   selectedPoint = PointSelected.DIRECCION;
   
   camVariables();
+  loadTextures();
 
   courtVariable();
 
@@ -14,6 +15,11 @@ void initGame()
   
   generatePlayers();
   
+}
+
+void loadTextures()
+{
+   ballTexture = loadImage("ballT.png");
 }
 
 void generatePlayers()

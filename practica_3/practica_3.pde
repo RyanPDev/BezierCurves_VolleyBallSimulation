@@ -56,7 +56,7 @@ int iteracionDeBola = 50;
 PVector puntoBola = new PVector(0, 0, 0);
 float incrementoBolaU = 1.0 /  iteracionDeBola;
 float u = 0;
-color ballColor = color(255, 224, 60);
+color ballColor = color(255,165,0);
 int ballCollided = 0;
 
 final int view1=1;
@@ -73,6 +73,9 @@ int state = view1;
 //TIMER
 float timeForReset;
 float ballFellTime;
+
+// TEXTURES
+PImage ballTexture;
 
 //ZONA SETUP
 
@@ -142,6 +145,7 @@ void serveBall()
       puntoBola =  miPrimeraBezier.calculameUnPunto(u); 
       if(millis() - ballFellTime >= timeForReset)
       {
+        println("STOP BECAUSE TIMER");
           stopServing(); 
       }
     }
@@ -166,7 +170,9 @@ void serveBall()
     //stroke(0, 0, 255);
     ballCollided = 1;
   }
-
+  fill(ballColor);
+  
+ 
   translate(puntoBola.x, puntoBola.y, puntoBola.z);
   sphere(ballSize);
   u+= incrementoBolaU;
