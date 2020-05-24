@@ -30,36 +30,36 @@ PVector calculateVector(PVector pos1, PVector pos2) //Calcula un vector unitario
 
 void calcSpikeCurve()
 {
-   PVector [] ps;
-   float distanceX,distanceZ,distanceY;
-   
-   distanceX = (destinationSpike.x - puntoBola.x);
-   distanceX = sqrt(sq(distanceX));
-   
-   distanceY = (destinationSpike.y - puntoBola.y);
-   distanceX = sqrt(sq(distanceX));
-   
-   distanceZ = (destinationSpike.z - puntoBola.z);
-   distanceZ = sqrt(sq(distanceZ));       
-   
-   ps = new PVector[4];
-   ps[0] = new PVector(puntoBola.x,puntoBola.y,puntoBola.z);
-   
-   PVector secondPointAux = new PVector(0,0,0);
-   secondPointAux.x = puntoBola.x - (distanceX / 4);
-   secondPointAux.y = puntoBola.y + (distanceY / 4);
-   secondPointAux.z = puntoBola.z - (distanceZ / 4);
-   ps[1] = new PVector(secondPointAux.x,secondPointAux.y,secondPointAux.z);
-   
-   PVector thirdPointAux = new PVector(0,0,0);
-   thirdPointAux.x = puntoBola.x - ((3*distanceX) / 4);
-   thirdPointAux.y = puntoBola.y + ((3*distanceY) / 4);
-   thirdPointAux.z = puntoBola.z - ((3*distanceZ) / 4);
-   ps[2] = new PVector(thirdPointAux.x,thirdPointAux.y,thirdPointAux.z);
-   
-   ps[3] = new PVector(destinationSpike.x,destinationSpike.y,destinationSpike.z);
-   
-   spikeCurve.modifyPoints(ps);
+  PVector [] ps;
+  float distanceX, distanceZ, distanceY;
+
+  distanceX = (destinationSpike.x - puntoBola.x);
+  distanceX = sqrt(sq(distanceX));
+
+  distanceY = (destinationSpike.y - puntoBola.y);
+  distanceX = sqrt(sq(distanceX));
+
+  distanceZ = (destinationSpike.z - puntoBola.z);
+  distanceZ = sqrt(sq(distanceZ));       
+
+  ps = new PVector[4];
+  ps[0] = new PVector(puntoBola.x, puntoBola.y, puntoBola.z);
+
+  PVector secondPointAux = new PVector(0, 0, 0);
+  secondPointAux.x = puntoBola.x - (distanceX / 4);
+  secondPointAux.y = puntoBola.y + (distanceY / 4);
+  secondPointAux.z = puntoBola.z - (distanceZ / 4);
+  ps[1] = new PVector(secondPointAux.x, secondPointAux.y, secondPointAux.z);
+
+  PVector thirdPointAux = new PVector(0, 0, 0);
+  thirdPointAux.x = puntoBola.x - ((3*distanceX) / 4);
+  thirdPointAux.y = puntoBola.y + ((3*distanceY) / 4);
+  thirdPointAux.z = puntoBola.z - ((3*distanceZ) / 4);
+  ps[2] = new PVector(thirdPointAux.x, thirdPointAux.y, thirdPointAux.z);
+
+  ps[3] = new PVector(destinationSpike.x, destinationSpike.y, destinationSpike.z);
+
+  spikeCurve.modifyPoints(ps);
 }
 
 void calcBlockCurve()

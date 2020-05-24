@@ -10,9 +10,7 @@ void initGame()
 
   lights();
 
-
-
-  
+  initCurves();
   timerReset();
 
   generatePlayers();
