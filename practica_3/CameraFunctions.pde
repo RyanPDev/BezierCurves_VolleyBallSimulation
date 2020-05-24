@@ -32,5 +32,9 @@ void cameraAngle()
     rotateX(radians(-20));
     rotateY(radians(240));
     break;
+
+  case view5:
+    updateCameraLookAt();
+    break;
   }
 }

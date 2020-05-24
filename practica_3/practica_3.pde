@@ -11,6 +11,7 @@ InterpolCurve spikeCurve;
 
 boolean mouseClick = false;
 boolean pointgrabbed = false;
+boolean printCurves = false;
 
 // GameVariables
 PVector courtPos, courtSize, floorSize, courtInitPos;
@@ -56,8 +57,12 @@ int iteracionDeBola = 50;
 PVector puntoBola = new PVector(0, 0, 0);
 float incrementoBolaU = 1.0 /  iteracionDeBola;
 float u = 0;
-color ballColor = color(255,165,0);
+color ballColor = color(255, 165, 0);
 int ballCollided = 0;
+boolean ballSpiked = false;
+
+PImage ballTexture;
+PShape ball;
 
 final int view1=1;
 final int view2=2;
@@ -74,8 +79,6 @@ int state = view1;
 float timeForReset;
 float ballFellTime;
 
-// TEXTURES
-PImage ballTexture;
 
 //ZONA SETUP
 
@@ -83,7 +86,6 @@ void setup()
 {
   size(800, 600, P3D);
   initGame();
-  
 }
 //ZONA DRAW
 
@@ -94,33 +96,34 @@ void draw()
   cameraAngle();
 
   if (gamePhase == Phase.SIMULATION) {
-      miPrimeraBezier.pintarCurva();
-      
-      
-     
-    } 
-    else if (gamePhase == Phase.SERVE) {
-      serveBall();
-      if(!ballInGame)
-        recieveCurve.pintaCurva();
-    }
-    for (int i = 0; i < arrayPlayers.length;i++)
+    miPrimeraBezier.pintarCurva();
+  } else if (gamePhase == Phase.SERVE) {
+    serveBall();
+    if (!ballInGame)
     {
-        arrayPlayers[i].drawPlayer();
-        arrayPlayers[i].calcCollisionBall();
+      recieveCurve.pintaCurva();
+      spikeCurve.pintaCurva();
     }
-    
-    drawCourt();
-    drawHUD();
+  }
+  for (int i = 0; i < arrayPlayers.length; i++)
+  {
+    arrayPlayers[i].drawPlayer();
+    arrayPlayers[i].calcCollisionBall();
+  }
+  pushMatrix();
+  translate(puntoBola.x, puntoBola.y, puntoBola.z);
+  shape(ball);
+  popMatrix();
   
-  
+  drawCourt();
+  drawHUD();
 }
 
 void serveBall()
 {
 
-  pushMatrix();
- 
+  
+
   switch(ballCollided)
   {
   case 0:
@@ -135,53 +138,66 @@ void serveBall()
   default:
     break;
   }
-  
-  if(ballInGame)
+
+  if (ballInGame)
   {
-    if(ballCollided != 2)
+    if (ballCollided != 2)
       puntoBola =  miPrimeraBezier.calculameUnPunto(u); 
     else
     {  
       puntoBola =  miPrimeraBezier.calculameUnPunto(u); 
-      if(millis() - ballFellTime >= timeForReset)
+      if (millis() - ballFellTime >= timeForReset)
       {
-        println("STOP BECAUSE TIMER");
-          stopServing(); 
+       
+        stopServing();
       }
     }
-  }
-  else if(ballCollided == 0)
+  } else
   {
-     puntoBola = recieveCurve.calculameUnPunto(u);
-     
+    if (!ballSpiked)
+    {
+      puntoBola = recieveCurve.calculameUnPunto(u);
+    } else
+    {
+      puntoBola = spikeCurve.calculameUnPunto(u);
+    }
   }
-  if(puntoBola.y- ballSize > -ballSize)
+  if (puntoBola.y- ballSize > -ballSize)
   {
     puntoBola.y = -ballSize;
-    if(ballCollided != 2)
+    if (ballCollided != 2)
     {
       ballFellTime = millis();
       ballCollided = 2;
     }
-    
   }
   if ( puntoBola.z < 20 && puntoBola.z > -20 && puntoBola.y >= -antenaHeight)
   {
     //stroke(0, 0, 255);
     ballCollided = 1;
   }
-  fill(ballColor);
+  // fill(ballColor);
+
   
- 
-  translate(puntoBola.x, puntoBola.y, puntoBola.z);
-  sphere(ballSize);
   u+= incrementoBolaU;
 
   if ( u > 4 || ( !ballInGame && u > 1)) {
-    stopServing();
+    if (!ballInGame && !ballSpiked)
+    {
+      u = 0;
+      calcSpikeCurve();
+      ballSpiked = true;
+      iteracionDeBola = 20;
+      incrementoBolaU = 1.0 /  iteracionDeBola;
+    }
+    
+    else
+    {
+      stopServing();
+    }
   }
 
-  popMatrix();
+  
 }
 
 

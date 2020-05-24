@@ -222,7 +222,8 @@ class curvaBezier {
 
   void pintarCurva()
   {
-
+    if(printCurves)
+    {
 
     fill(200, 0, 0, 50); // semi-transparent
     stroke(10);
@@ -291,5 +292,6 @@ class curvaBezier {
       }
       point(punto.x, punto.y, punto.z);
     }
+  }
   }
 }

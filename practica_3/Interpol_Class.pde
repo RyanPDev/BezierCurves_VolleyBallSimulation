@@ -91,6 +91,8 @@ class InterpolCurve
   
   void pintaCurva()  //SE LLAMA TODO EL RATO
   {
+    if(printCurves)
+    {
     PVector punto = new PVector(0,0,0);
      // GRUESO DE LA CURVA
      strokeWeight(6);
@@ -107,7 +109,7 @@ class InterpolCurve
        // Lo pintos
        point(punto.x,punto.y,punto.z);
      }
-     
+    }
   }
   
 }
