@@ -52,16 +52,24 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
     break;
 
   case '1':
-    state = frontView;
+    state = view1;
     break;
 
   case '2':
-    state = sideView;
+    state = view2;
+    break;
+
+  case '3':
+    state = view3;
+    break;
+
+  case '4':
+    state = view4;
     break;
   }
 }
 
-void stopServing()
+vo+id stopServing()
 {
   gamePhase = auxiliarPhase;
   isServing = false;
