@@ -35,6 +35,7 @@ void cameraAngle()
 
   case view5:
     updateCameraLookAt();
+    camera(courtPos.x - 900, courtPos.y - 1000 , courtPos.z, puntoBola.x, puntoBola.y, puntoBola.z, 0, 1, 0);
     break;
   }
 }
