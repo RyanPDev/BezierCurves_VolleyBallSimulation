@@ -12,7 +12,7 @@ boolean pointgrabbed = false;
 // GameVariables
 PVector courtPos, courtSize, floorSize, courtInitPos;
 float playerHeight, antenaHeight, antenaSize, courtLinesSize, distanceCenterAntena;
-int rows, cols, scl;
+int rows, cols, netScale;
 
 PVector recievingPoint, destinationPoint, secondRecievingPoint, ThirdRecievingPoint;
 float reciviengHeight, ballSize;
@@ -24,7 +24,7 @@ enum CamPhase {
   COURT, FIRSTPOINT, SECONDPOINT, LASTPOINT
 }; // Enumerador con los diferentes estados de la camara
 CamPhase cameraPhase; // La fase actual de la camara en la que se encuentra el juego
-boolean freeCam = true;
+boolean freeCam = false;
 long animationTimeInMillis; // Tiempo que tarda la camara en alcanzar el objetivo a mirar
 
 enum PointSelected {
@@ -63,7 +63,7 @@ void setup()
 {
   size(800, 600, P3D);
   gamePhase = Phase.SIMULATION;
-  selectedPoint = PointSelected.NONE;
+  selectedPoint = PointSelected.DIRECCION;
   // Cámara
   cam = new PeasyCam(this, 2800);
   cam.setMinimumDistance(50);
@@ -92,7 +92,7 @@ void setup()
   antenaSize = 25;
   courtLinesSize = 25;
   distanceCenterAntena = 1097/2;
-  scl = 26;
+  netScale = 26;
 
   lights();
   color c = color(255, 255, 0);
@@ -117,35 +117,19 @@ void setup()
 void draw()
 {
   //TERRENO
-  switch (state) {
-  case frontView: 
-    background(255);    
-    updateCameraLookAt();
-    rotateX(radians(20));
-    rotateY(radians(180));
-    if (gamePhase == Phase.SIMULATION) {
+  background(255);  
+  
+  cameraAngle();
+  
+  if (gamePhase == Phase.SIMULATION) {
       miPrimeraBezier.pintarCurva();
     } else if (gamePhase == Phase.SERVE) {
       serveBall();
     }
     drawCourt();
     drawHUD();
-    break;
-
-  case sideView:
-    background(255);    
-    updateCameraLookAt();
-    rotateX(radians(20));
-    rotateY(radians(-90));
-    if (gamePhase == Phase.SIMULATION) {
-      miPrimeraBezier.pintarCurva();
-    } else if (gamePhase == Phase.SERVE) {
-      serveBall();
-    }
-    drawCourt();
-    drawHUD();
-    break;
-  }
+  
+  
 }
 
 void serveBall()
