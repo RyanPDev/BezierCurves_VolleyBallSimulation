@@ -12,10 +12,10 @@ void drawCourt() {
 
   fill(255, 204, 0); 
   box(floorSize.x, floorSize.y, floorSize.z);
-  
-  
-  
-  fill(135,206,235); 
+
+
+
+  fill(135, 206, 235); 
   box(5000, floorSize.y/2, 5000);
 
   noStroke();
@@ -24,30 +24,30 @@ void drawCourt() {
   pushMatrix();
   stroke(0);
   strokeWeight(2);
-     translate(1800, -150/2, 0);
-     fill(255, 224, 0); 
-    box(floorSize.x, -150, floorSize.z);
-    for(int i = 0; i< 3; i++)
-    {
-      translate(300, -150, 0);
-      box(floorSize.x, 150, floorSize.z);
-    }
+  translate(1800, -150/2, 0);
+  fill(255, 224, 0); 
+  box(floorSize.x, -150, floorSize.z);
+  for (int i = 0; i< 3; i++)
+  {
+    translate(300, -150, 0);
+    box(floorSize.x, 150, floorSize.z);
+  }
   popMatrix();
-  
+
   pushMatrix();
-  
-    translate(-1800, -150/2, 0);
-    fill(255, 224, 0); 
-    box(floorSize.x, -150, floorSize.z);
-    for(int i = 0; i< 3; i++)
-    {
-      translate(-300, -150, 0);
-      box(floorSize.x, 150, floorSize.z);
-    }
+
+  translate(-1800, -150/2, 0);
+  fill(255, 224, 0); 
+  box(floorSize.x, -150, floorSize.z);
+  for (int i = 0; i< 3; i++)
+  {
+    translate(-300, -150, 0);
+    box(floorSize.x, 150, floorSize.z);
+  }
   popMatrix();
-  
+
   pushMatrix();
-strokeWeight(8);
+  strokeWeight(8);
   translate(-distanceCenterAntena, -antenaHeight/2, 0);
   noStroke();
   fill(30, 144, 255);
@@ -83,22 +83,22 @@ strokeWeight(8);
   popMatrix();
 
   pushMatrix();
-  
+
   stroke(0);
-  
+
   translate(-distanceCenterAntena, -antenaHeight, 0);
   strokeWeight(1);
   noFill();
-  for (int y = 0; y < (antenaHeight/1.7)/scl; y++){
+  for (int y = 0; y < (antenaHeight/1.7)/scl; y++) {
     beginShape(TRIANGLE_STRIP);
-    for (int x = 0; x <= (distanceCenterAntena*2)/scl; x++){
+    for (int x = 0; x <= (distanceCenterAntena*2)/scl; x++) {
       vertex(x*scl, y*scl);
       vertex(x*scl, (y+1)*scl);
       //rect(x*scl, y*scl, scl, scl);
     }
     endShape();
   }
-  
+
   popMatrix();
 
   popMatrix();

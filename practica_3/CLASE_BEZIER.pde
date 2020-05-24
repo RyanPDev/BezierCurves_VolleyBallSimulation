@@ -40,12 +40,12 @@ class curvaBezier {
       puntosDeControl[i].x = pc[i].x;
       puntosDeControl[i].y = pc[i].y;
       puntosDeControl[i].z = pc[i].z;
-      
+
       initialPoint[i].x = puntosDeControl[i].x;
       initialPoint[i].y = puntosDeControl[i].y;
       initialPoint[i].z = puntosDeControl[i].z;
-      
-      
+
+
       //ALMACENAMOS EL RESTO
       colorCurva = c;
 
@@ -54,53 +54,50 @@ class curvaBezier {
     rearrangeMaxMin();
     calculoCoefs();
   }
-  
+
   void rearrangeMaxMin()
   {
-    
-       float firstLastDistance;
-       
-        maxPosPoint[1].x = courtSize.x / 2;
-        maxPosPoint[1].y = initialPoint[1].y + movingLimit;
 
-        minPosPoint[1].x = -courtSize.x / 2;
-        minPosPoint[1].y = initialPoint[1].y - movingLimit;
-     
-    
-         maxPosPoint[2].x = puntosDeControl[1].x + movingLimit;
-         minPosPoint[2].x = puntosDeControl[1].x - movingLimit; 
-         
-         
-         maxPosPoint[2].y = puntosDeControl[1].y + movingLimit;
-         minPosPoint[2].y = puntosDeControl[1].y - movingLimit; 
-         if(minPosPoint[2].y > -75)
-         {
-           minPosPoint[2].y = -75;
-           
-         }
-        maxPosPoint[3].x = puntosDeControl[2].x;
-        maxPosPoint[3].z = courtPos.z + (courtSize.z/2);
-        //maxPosPoint[3].y = puntosDeControl[2].y + 100;
-        maxPosPoint[3].y =  -70;
-        
-        minPosPoint[3].x = puntosDeControl[2].x;
-        minPosPoint[3].z = courtPos.z;
-      //  minPosPoint[3].y = puntosDeControl[2].y + 100;
-        minPosPoint[3].y = -70;
-        
-        firstLastDistance = (puntosDeControl[3].z - puntosDeControl[0].z);
-        firstLastDistance = sqrt(sq(firstLastDistance));
-        puntosDeControl[1].z = puntosDeControl[0].z + (firstLastDistance/ 4);
-        puntosDeControl[2].z = puntosDeControl[0].z + ((3* firstLastDistance) / 4);    
-        
-        maxPosPoint[1].z =puntosDeControl[1].z;
-        
-        minPosPoint[2].z = puntosDeControl[2].z;
-         maxPosPoint[2].z =puntosDeControl[2].z;
-        
-        minPosPoint[1].z = puntosDeControl[1].z;
-     
-      
+    float firstLastDistance;
+
+    maxPosPoint[1].x = courtSize.x / 2;
+    maxPosPoint[1].y = initialPoint[1].y + movingLimit;
+
+    minPosPoint[1].x = -courtSize.x / 2;
+    minPosPoint[1].y = initialPoint[1].y - movingLimit;
+
+
+    maxPosPoint[2].x = puntosDeControl[1].x + movingLimit;
+    minPosPoint[2].x = puntosDeControl[1].x - movingLimit; 
+
+
+    maxPosPoint[2].y = puntosDeControl[1].y + movingLimit;
+    minPosPoint[2].y = puntosDeControl[1].y - movingLimit; 
+    if (minPosPoint[2].y > -75)
+    {
+      minPosPoint[2].y = -75;
+    }
+    maxPosPoint[3].x = puntosDeControl[2].x;
+    maxPosPoint[3].z = courtPos.z + (courtSize.z/2);
+    //maxPosPoint[3].y = puntosDeControl[2].y + 100;
+    maxPosPoint[3].y =  -70;
+
+    minPosPoint[3].x = puntosDeControl[2].x;
+    minPosPoint[3].z = courtPos.z;
+    //  minPosPoint[3].y = puntosDeControl[2].y + 100;
+    minPosPoint[3].y = -70;
+
+    firstLastDistance = (puntosDeControl[3].z - puntosDeControl[0].z);
+    firstLastDistance = sqrt(sq(firstLastDistance));
+    puntosDeControl[1].z = puntosDeControl[0].z + (firstLastDistance/ 4);
+    puntosDeControl[2].z = puntosDeControl[0].z + ((3* firstLastDistance) / 4);    
+
+    maxPosPoint[1].z =puntosDeControl[1].z;
+
+    minPosPoint[2].z = puntosDeControl[2].z;
+    maxPosPoint[2].z =puntosDeControl[2].z;
+
+    minPosPoint[1].z = puntosDeControl[1].z;
   }
   //METODOS
   void calculoCoefs()
@@ -166,11 +163,11 @@ class curvaBezier {
         puntosDeControl[point].z = puntosDeControl[point].z;
       } else
       {
-       // puntosDeControl[point].x = puntosDeControl[point].x;
-       //// puntosDeControl[point].y = puntosDeControl[point].y;
+        // puntosDeControl[point].x = puntosDeControl[point].x;
+        //// puntosDeControl[point].y = puntosDeControl[point].y;
         puntosDeControl[3].z += movimientoPunto.y  * reverseDirectionX;
       }
-      
+
       rearrangePoints();
       calculoCoefs();
       lastMouseInput.x = mousePosition.x;
@@ -188,16 +185,16 @@ class curvaBezier {
     puntoCalculado.x = coeficientes[0].x + coeficientes[1].x * u + coeficientes[2].x *u*u + coeficientes[3].x *u*u*u;
     puntoCalculado.y = coeficientes[0].y + coeficientes[1].y * u + coeficientes[2].y *u*u + coeficientes[3].y *u*u*u;
     puntoCalculado.z = coeficientes[0].z + coeficientes[1].z * u + coeficientes[2].z *u*u + coeficientes[3].z *u*u*u;
-    
+
     return puntoCalculado;
   }
-  
+
   void rearrangePoints()
   {
-    
-     rearrangeMaxMin();
-    
-    for(int point = 1; point < 4; point++)
+
+    rearrangeMaxMin();
+
+    for (int point = 1; point < 4; point++)
     {
       if (puntosDeControl[point].x > maxPosPoint[point].x)
       {
@@ -228,33 +225,33 @@ class curvaBezier {
 
     // strokeWeight(1);
     // fill(205, 255, 255, 0);
-   
+
     fill(200, 0, 0, 50); // semi-transparent
     stroke(10);
-/*
+    /*
     pushMatrix();
-
-    switch(selectedPoint)
-    {
-    case DIRECCION:
-      translate(courtPos.x, -123, puntosDeControl[1].z);
-      box(courtSize.x, movingLimit * 2, -1);
-      break;
-    case EFECTO:
-      translate(courtPos.x, puntosDeControl[1].y, puntosDeControl[2].z);
-      box(movingLimit*2, movingLimit*2, -1);
-      break;
-    case POTENCIA:
-      translate(initialPoint[3].x, initialPoint[3].y, initialPoint[3].z);
-      box(movingLimit*2, 1, movingLimit*2);
-      break;
-    default:
-
-      break;
-    }
-    
-    popMatrix();
-*/
+     
+     switch(selectedPoint)
+     {
+     case DIRECCION:
+     translate(courtPos.x, -123, puntosDeControl[1].z);
+     box(courtSize.x, movingLimit * 2, -1);
+     break;
+     case EFECTO:
+     translate(courtPos.x, puntosDeControl[1].y, puntosDeControl[2].z);
+     box(movingLimit*2, movingLimit*2, -1);
+     break;
+     case POTENCIA:
+     translate(initialPoint[3].x, initialPoint[3].y, initialPoint[3].z);
+     box(movingLimit*2, 1, movingLimit*2);
+     break;
+     default:
+     
+     break;
+     }
+     
+     popMatrix();
+     */
     boolean curveInGame = true;
     fill(0, 255);
     //NECESITO UN PUNTO
@@ -264,7 +261,7 @@ class curvaBezier {
     for (int i= 0; i < 4; i++)
     {
       punto = puntosDeControl[i];
-     
+
       pushMatrix();
       translate(punto.x, punto.y, punto.z);
       point(0, 0, 0);
@@ -275,10 +272,8 @@ class curvaBezier {
       stroke(0, 0, 255);
       line(0, 0, 0, 0, 0, 100);
       popMatrix();
-     
-       
     }
-    
+
     // Defino como pintar
     stroke(colorCurva);
     //ME desplazo por la curva desde u = 0 hasta u igual a 1
@@ -287,17 +282,16 @@ class curvaBezier {
     {
       punto = calculameUnPunto(u); 
       //punto.z < 220 && punto.z > -220 &&
-      if( punto.z < 20 && punto.z > -20 && punto.y >= -antenaHeight)
+      if ( punto.z < 20 && punto.z > -20 && punto.y >= -antenaHeight)
       {
-        stroke(0,0,255);
+        stroke(0, 0, 255);
       }
-      if(punto.y >= 0)
+      if (punto.y >= 0)
       {
-          //curveInGame=false;
-          stroke(255,0,0);
+        //curveInGame=false;
+        stroke(255, 0, 0);
       }
       point(punto.x, punto.y, punto.z);
     }
-   
   }
 }

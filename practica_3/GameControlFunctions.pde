@@ -1,62 +1,75 @@
 void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se presiona una tecla
 {
-  if ((key == ' ') && gamePhase == Phase.SIMULATION) //Activar o desactivar el modo random
-  {
-    if (!freeCam)
-    {
-      freeCam = true;
-    } else if (freeCam)
-    {
-      freeCam = false;
+
+  switch(key) {
+  case ' ':
+    if (gamePhase == Phase.SIMULATION) {
+      if (!freeCam)
+      {
+        freeCam = true;
+      } else if (freeCam)
+      {
+        freeCam = false;
+      }
+      cam.setActive(freeCam);
     }
-    cam.setActive(freeCam);
-  }
-  if ((key == 's'|| key == 'S')) //Activar o desactivar el modo random
-  {
-    if (!isServing)
-    {
+    break;
+
+  case 's':    
+  case 'S':
+    if (!isServing) {
       isServing = true;
       auxiliarPhase = gamePhase;
       gamePhase = Phase.SERVE;
-    } else if (isServing)
-    {
+    } else if (isServing) {
 
       stopServing();
-      
     }
-  }
-  if ((key == 'x'|| key == 'X' || key == 'c'|| key == 'C') && gamePhase == Phase.SIMULATION)
-  {
-    if (!changedSelectedObject)
-    {
-      changedSelectedObject = true;
-      if (selectedPoint == PointSelected.DIRECCION)
-      {
-        selectedPoint = PointSelected.EFECTO;
-      } else if (selectedPoint == PointSelected.EFECTO)
-      {
-        selectedPoint = PointSelected.POTENCIA;
-      } else if (selectedPoint == PointSelected.POTENCIA)
-      {
-        selectedPoint = PointSelected.DIRECCION;
-      } else if (selectedPoint == PointSelected.NONE)
-      {
-        selectedPoint = PointSelected.DIRECCION;
+    break;
+
+  case 'x':
+  case 'X':
+  case 'c':
+  case 'C':
+    if (gamePhase == Phase.SIMULATION) {
+      if (!changedSelectedObject) {
+        changedSelectedObject = true;
+        if (selectedPoint == PointSelected.DIRECCION)
+        {
+          selectedPoint = PointSelected.EFECTO;
+        } else if (selectedPoint == PointSelected.EFECTO)
+        {
+          selectedPoint = PointSelected.POTENCIA;
+        } else if (selectedPoint == PointSelected.POTENCIA)
+        {
+          selectedPoint = PointSelected.DIRECCION;
+        } else if (selectedPoint == PointSelected.NONE)
+        {
+          selectedPoint = PointSelected.DIRECCION;
+        }
       }
     }
+    break;
+
+  case '1':
+    state = frontView;
+    break;
+
+  case '2':
+    state = sideView;
+    break;
   }
 }
 
 void stopServing()
 {
   gamePhase = auxiliarPhase;
-      isServing = false;
-      curveInGame = true;
- 
-          ballCollided = 0;
-      puntoBola = new PVector(0, 0, 0);
-      u = 0;
-      
+  isServing = false;
+  curveInGame = true;
+
+  ballCollided = 0;
+  puntoBola = new PVector(0, 0, 0);
+  u = 0;
 }
 
 void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que se presiona una tecla
