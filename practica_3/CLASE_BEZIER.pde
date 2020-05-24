@@ -138,14 +138,14 @@ class curvaBezier {
     //  camaraAPunto = calculateVector(cameraPosition, puntosDeControl[point]);
 
     /*if (puntosDeControl[point].z < camPos[2])
-     {
-     reverseDirectionZ = -1;
-     }
-     if (puntosDeControl[point].x < camPos[0])
-     {
-     reverseDirectionX = -1;
-     }
-     */
+    {
+      reverseDirectionZ = -1;
+    }
+    if (puntosDeControl[point].x < camPos[0])
+    {
+      reverseDirectionX = -1;
+    }
+*/
     movimientoPunto = calculateVector(mousePosition, lastMouseInput);
 
     //movimientoPunto = calculateUnitVector(mousePosition,lastMouseInput);
@@ -222,76 +222,76 @@ class curvaBezier {
 
   void pintarCurva()
   {
-
-    if (!freeCam)
+   
+    if(!freeCam)
     {
-      fill(200, 0, 0, 50); // semi-transparent
-      stroke(10);
-      /*
+    fill(200, 0, 0, 50); // semi-transparent
+    stroke(10);
+    /*
     pushMatrix();
-       
-       switch(selectedPoint)
-       {
-       case DIRECCION:
-       translate(courtPos.x, -123, puntosDeControl[1].z);
-       box(courtSize.x, movingLimit * 2, -1);
-       break;
-       case EFECTO:
-       translate(courtPos.x, puntosDeControl[1].y, puntosDeControl[2].z);
-       box(movingLimit*2, movingLimit*2, -1);
-       break;
-       case POTENCIA:
-       translate(initialPoint[3].x, initialPoint[3].y, initialPoint[3].z);
-       box(movingLimit*2, 1, movingLimit*2);
-       break;
-       default:
-       
-       break;
-       }
-       
-       popMatrix();
-       */
-      boolean curveInGame = true;
-      fill(0, 255);
-      //NECESITO UN PUNTO
-      PVector punto = new PVector(0, 0, 0);
-      stroke(colorPuntosDeControl);
-      strokeWeight(5);
-      for (int i= 0; i < 4; i++)
-      {
-        punto = puntosDeControl[i];
+     
+     switch(selectedPoint)
+     {
+     case DIRECCION:
+     translate(courtPos.x, -123, puntosDeControl[1].z);
+     box(courtSize.x, movingLimit * 2, -1);
+     break;
+     case EFECTO:
+     translate(courtPos.x, puntosDeControl[1].y, puntosDeControl[2].z);
+     box(movingLimit*2, movingLimit*2, -1);
+     break;
+     case POTENCIA:
+     translate(initialPoint[3].x, initialPoint[3].y, initialPoint[3].z);
+     box(movingLimit*2, 1, movingLimit*2);
+     break;
+     default:
+     
+     break;
+     }
+     
+     popMatrix();
+     */
+    boolean curveInGame = true;
+    fill(0, 255);
+    //NECESITO UN PUNTO
+    PVector punto = new PVector(0, 0, 0);
+    stroke(colorPuntosDeControl);
+    strokeWeight(5);
+    for (int i= 0; i < 4; i++)
+    {
+      punto = puntosDeControl[i];
 
-        pushMatrix();
-        translate(punto.x, punto.y, punto.z);
-        point(0, 0, 0);
-        stroke(255, 0, 0);
-        line(0, 0, 0, 100, 0, 0);
-        stroke(0, 255, 0);
-        line(0, 0, 0, 0, -100, 0);
-        stroke(0, 0, 255);
-        line(0, 0, 0, 0, 0, 100);
-        popMatrix();
-      }
-
-      // Defino como pintar
-      stroke(colorCurva);
-      //ME desplazo por la curva desde u = 0 hasta u igual a 1
-      float incrementoU = 1.0 / numeroDePuntosAPintar;
-      for (float u= 0; u<= 4 && curveInGame; u += incrementoU)
-      {
-        punto = calculameUnPunto(u); 
-        //punto.z < 220 && punto.z > -220 &&
-        if ( punto.z < 20 && punto.z > -20 && punto.y >= -antenaHeight)
-        {
-          stroke(0, 0, 255);
-        }
-        if (punto.y >= 0)
-        {
-          //curveInGame=false;
-          stroke(255, 0, 0);
-        }
-        point(punto.x, punto.y, punto.z);
-      }
+      pushMatrix();
+      translate(punto.x, punto.y, punto.z);
+      point(0, 0, 0);
+      stroke(255, 0, 0);
+      line(0, 0, 0, 100, 0, 0);
+      stroke(0, 255, 0);
+      line(0, 0, 0, 0, -100, 0);
+      stroke(0, 0, 255);
+      line(0, 0, 0, 0, 0, 100);
+      popMatrix();
     }
+     
+    // Defino como pintar
+    stroke(colorCurva);
+    //ME desplazo por la curva desde u = 0 hasta u igual a 1
+    float incrementoU = 1.0 / numeroDePuntosAPintar;
+    for (float u= 0; u<= 4 && curveInGame; u += incrementoU)
+    {
+      punto = calculameUnPunto(u); 
+      //punto.z < 220 && punto.z > -220 &&
+      if ( punto.z < 20 && punto.z > -20 && punto.y >= -antenaHeight)
+      {
+        stroke(0, 0, 255);
+      }
+      if (punto.y >= 0)
+      {
+        //curveInGame=false;
+        stroke(255, 0, 0);
+      }
+      point(punto.x, punto.y, punto.z);
+    }
+  }
   }
 }
