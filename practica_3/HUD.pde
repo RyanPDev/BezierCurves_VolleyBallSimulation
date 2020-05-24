@@ -15,7 +15,7 @@ void drawHUD() // Funcion que dibuja HUD
   textAlign(CENTER, CENTER);
   textSize(15); 
   fill(0);
-  
+
   if (!freeCam)
   {
     textSize(22);
@@ -25,7 +25,7 @@ void drawHUD() // Funcion que dibuja HUD
   text("EDIT MODE", (width - 100), height - 200);
   textSize(15);
   fill(0);
-  
+
   if (selectedPoint == PointSelected.DIRECCION)
   {
     textSize(22);
@@ -49,7 +49,7 @@ void drawHUD() // Funcion que dibuja HUD
   if (selectedPoint == PointSelected.POTENCIA)
   {
     textSize(22);
-    fill(255, 0,0 );
+    fill(255, 0, 0 );
   }
 
   text("POWER", (width - 100), height - 60);
