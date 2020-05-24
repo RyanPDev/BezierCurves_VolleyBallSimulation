@@ -21,7 +21,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       isServing = true;
       auxiliarPhase = gamePhase;
       gamePhase = Phase.SERVE;
-    } else if (isServing) {
+    } else{
 
       stopServing();
     }
@@ -74,9 +74,9 @@ void stopServing()
   gamePhase = auxiliarPhase;
   isServing = false;
   curveInGame = true;
-
+  ballInGame = true;
   ballCollided = 0;
-  puntoBola = new PVector(0, 0, 0);
+  //puntoBola = new PVector(0, 0, 0);
   u = 0;
 }
 
