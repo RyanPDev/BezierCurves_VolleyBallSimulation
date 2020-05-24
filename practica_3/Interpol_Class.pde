@@ -91,7 +91,7 @@ class InterpolCurve
   
   void pintaCurva()  //SE LLAMA TODO EL RATO
   {
-    if(printCurves)
+    if(!freeCam)
     {
     PVector punto = new PVector(0,0,0);
      // GRUESO DE LA CURVA
