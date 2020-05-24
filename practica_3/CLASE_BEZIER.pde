@@ -124,8 +124,8 @@ class curvaBezier {
     float[] camPos = cam.getPosition();  // x, y, and z coordinates of camera in model space
     //  float[] camRot = cam.getRotations(); // x, y, and z rotations required to face camera in model spac
     float moduleMovementVec;
-    int reverseDirectionZ = 1;
-    int reverseDirectionX = 1;
+    int reverseDirectionZ = -1;
+    int reverseDirectionX = -1;
     // PVector cameraPosition = new PVector(0, 0, 0);
     //PVector camaraAPunto = new PVector(0, 0, 0);
     PVector movimientoPunto = new PVector(0, 0, 0);
@@ -137,7 +137,7 @@ class curvaBezier {
      */
     //  camaraAPunto = calculateVector(cameraPosition, puntosDeControl[point]);
 
-    if (puntosDeControl[point].z < camPos[2])
+    /*if (puntosDeControl[point].z < camPos[2])
     {
       reverseDirectionZ = -1;
     }
@@ -145,7 +145,7 @@ class curvaBezier {
     {
       reverseDirectionX = -1;
     }
-
+*/
     movimientoPunto = calculateVector(mousePosition, lastMouseInput);
 
     //movimientoPunto = calculateUnitVector(mousePosition,lastMouseInput);
@@ -158,14 +158,14 @@ class curvaBezier {
       if (point != 3)
       {
 
-        puntosDeControl[point].x += movimientoPunto.x * reverseDirectionZ;
+        puntosDeControl[point].x += movimientoPunto.x;
         puntosDeControl[point].y -= movimientoPunto.y;
         puntosDeControl[point].z = puntosDeControl[point].z;
       } else
       {
         // puntosDeControl[point].x = puntosDeControl[point].x;
         //// puntosDeControl[point].y = puntosDeControl[point].y;
-        puntosDeControl[3].z += movimientoPunto.y  * reverseDirectionX;
+        puntosDeControl[3].z += movimientoPunto.y ;
       }
 
       rearrangePoints();
@@ -223,8 +223,6 @@ class curvaBezier {
   void pintarCurva()
   {
 
-    // strokeWeight(1);
-    // fill(205, 255, 255, 0);
 
     fill(200, 0, 0, 50); // semi-transparent
     stroke(10);

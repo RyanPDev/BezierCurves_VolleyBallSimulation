@@ -89,11 +89,11 @@ void drawCourt() {
   translate(-distanceCenterAntena, -antenaHeight, 0);
   strokeWeight(1);
   noFill();
-  for (int y = 0; y < (antenaHeight/1.7)/scl; y++) {
+  for (int y = 0; y < (antenaHeight/1.7)/netScale; y++) {
     beginShape(TRIANGLE_STRIP);
-    for (int x = 0; x <= (distanceCenterAntena*2)/scl; x++) {
-      vertex(x*scl, y*scl);
-      vertex(x*scl, (y+1)*scl);
+    for (int x = 0; x <= (distanceCenterAntena*2)/netScale; x++) {
+      vertex(x*netScale, y*netScale);
+      vertex(x*netScale, (y+1)*netScale);
       //rect(x*scl, y*scl, scl, scl);
     }
     endShape();
