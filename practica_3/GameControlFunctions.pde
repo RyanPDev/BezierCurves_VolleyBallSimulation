@@ -22,7 +22,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       auxiliarPhase = gamePhase;
       ballCollided = 0;
       gamePhase = Phase.SERVE;
-    } else{
+    } else {
 
       stopServing();
     }
@@ -67,12 +67,16 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
   case '4':
     state = view4;
     break;
+
+  case '5':
+    state = view5;
+    break;
   }
 }
 
 void stopServing()
 {
-   
+
   gamePhase = auxiliarPhase;
   isServing = false;
   //ballFellTime = millis();
