@@ -11,6 +11,7 @@ InterpolCurve spikeCurve;
 
 boolean mouseClick = false;
 boolean pointgrabbed = false;
+boolean printCurves = false;
 
 // GameVariables
 PVector courtPos, courtSize, floorSize, courtInitPos;
@@ -58,6 +59,10 @@ float incrementoBolaU = 1.0 /  iteracionDeBola;
 float u = 0;
 color ballColor = color(255, 165, 0);
 int ballCollided = 0;
+boolean ballSpiked = false;
+
+PImage ballTexture;
+PShape ball;
 
 final int view1=1;
 final int view2=2;
@@ -74,8 +79,6 @@ int state = view1;
 float timeForReset;
 float ballFellTime;
 
-// TEXTURES
-PImage ballTexture;
 
 //ZONA SETUP
 
@@ -97,14 +100,21 @@ void draw()
   } else if (gamePhase == Phase.SERVE) {
     serveBall();
     if (!ballInGame)
+    {
       recieveCurve.pintaCurva();
+      spikeCurve.pintaCurva();
+    }
   }
   for (int i = 0; i < arrayPlayers.length; i++)
   {
     arrayPlayers[i].drawPlayer();
     arrayPlayers[i].calcCollisionBall();
   }
-
+  pushMatrix();
+  translate(puntoBola.x, puntoBola.y, puntoBola.z);
+  shape(ball);
+  popMatrix();
+  
   drawCourt();
   drawHUD();
 }
@@ -112,7 +122,7 @@ void draw()
 void serveBall()
 {
 
-  pushMatrix();
+  
 
   switch(ballCollided)
   {
@@ -138,13 +148,19 @@ void serveBall()
       puntoBola =  miPrimeraBezier.calculameUnPunto(u); 
       if (millis() - ballFellTime >= timeForReset)
       {
-        println("STOP BECAUSE TIMER");
+       
         stopServing();
       }
     }
-  } else if (ballCollided == 0)
+  } else
   {
-    puntoBola = recieveCurve.calculameUnPunto(u);
+    if (!ballSpiked)
+    {
+      puntoBola = recieveCurve.calculameUnPunto(u);
+    } else
+    {
+      puntoBola = spikeCurve.calculameUnPunto(u);
+    }
   }
   if (puntoBola.y- ballSize > -ballSize)
   {
@@ -160,18 +176,28 @@ void serveBall()
     //stroke(0, 0, 255);
     ballCollided = 1;
   }
-  fill(ballColor);
+  // fill(ballColor);
 
-
-  translate(puntoBola.x, puntoBola.y, puntoBola.z);
-  sphere(ballSize);
+  
   u+= incrementoBolaU;
 
   if ( u > 4 || ( !ballInGame && u > 1)) {
-    stopServing();
+    if (!ballInGame && !ballSpiked)
+    {
+      u = 0;
+      calcSpikeCurve();
+      ballSpiked = true;
+      iteracionDeBola = 20;
+      incrementoBolaU = 1.0 /  iteracionDeBola;
+    }
+    
+    else
+    {
+      stopServing();
+    }
   }
 
-  popMatrix();
+  
 }
 
 

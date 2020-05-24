@@ -79,7 +79,10 @@ void stopServing()
 
   gamePhase = auxiliarPhase;
   isServing = false;
+  ballSpiked = false;
   //ballFellTime = millis();
+  iteracionDeBola = 50;
+  incrementoBolaU = 1.0 /  iteracionDeBola;
   curveInGame = true;
   ballInGame = true;
   ballCollided = 0;

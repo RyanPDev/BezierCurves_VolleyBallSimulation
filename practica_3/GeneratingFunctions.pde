@@ -10,10 +10,17 @@ void initGame()
 
   lights();
   
-  initCuves();
+ 
+  
+  initCurves();
   timerReset();
   
   generatePlayers();
+  
+  noStroke();
+  ballTexture = loadImage("ballT.png");
+  ball = createShape(SPHERE, ballSize);
+  ball.setTexture(ballTexture);
   
 }
 
@@ -30,7 +37,11 @@ void generatePlayers()
    playerWidthZ = 20;
    PVector auxVector = new PVector(0,0,0);
    int auxType = 0;
+   
+   destinationPoint = new PVector(courtPos.x, - playerHeight * 2,courtPos.z + (((courtSize.z/2))/4)); // AQUI
   
+    reciviengHeight = 500;
+    ballSize = 32.5;
    
    for (int i = 0; i < 12; i++)
    {
@@ -126,10 +137,6 @@ void courtVariable()
   courtInitPos.y = courtPos.y- (courtSize.y/2);
   courtInitPos.z = courtPos.z- (courtSize.z/2);
   
-  destinationPoint = new PVector(courtPos.x, - playerHeight * 2,courtPos.z + (((courtSize.z/2))/4)); // AQUI
-  
-  reciviengHeight = 500;
-  ballSize = 32.5;
   
   floorSize.x = courtSize.x*1.5;
   floorSize.y = courtSize.y * 0.5;
@@ -142,15 +149,15 @@ void courtVariable()
   netScale = 26;    
 }
 
-void initCuves()
+void initCurves()
 {
   
   destinationSpike = new PVector(0,0,0);
-  destinationSpike = new PVector(courtPos.x - ((3*(courtSize.x/2))/4),-playerHeight / 2,courtPos.z - ((3*(courtSize.z/2))/4));
+  destinationSpike = new PVector(courtPos.x - ((3*(courtSize.x/2))/4),100,courtPos.z - ((3*(courtSize.z/2))/4));
   
- // spikeCurve = new InterpolCurve(color(260,21,133));
+  spikeCurve = new InterpolCurve(color(260,21,133));
   
- // calcSpikeCurve();
+  
   
   
    color c = color(255, 255, 0);
@@ -171,35 +178,4 @@ void initCuves()
   miPrimeraBezier.rearrangePoints();    
 
   recieveCurve = new InterpolCurve(color(199,21,133));
-}
-
-void calcSpikeCurve()
-{
-   PVector [] ps;
-   float distanceX,distanceZ;
-   
-   distanceX = (destinationPoint.x - puntoBola.x);
-   distanceX = sqrt(sq(distanceX));
-   
-   distanceZ = (destinationPoint.z - puntoBola.z);
-   distanceZ = sqrt(sq(distanceZ));       
-   
-   ps = new PVector[4];
-   ps[0] = new PVector(puntoBola.x,puntoBola.y,puntoBola.z);
-   
-   PVector secondPointAux = new PVector(0,0,0);
-   secondPointAux.x = puntoBola.x + (distanceX / 4);
-   secondPointAux.y = -reciviengHeight;
-   secondPointAux.z = puntoBola.z + (distanceZ / 4);
-   ps[1] = new PVector(secondPointAux.x,secondPointAux.y,secondPointAux.z);
-   
-   PVector thirdPointAux = new PVector(0,0,0);
-   thirdPointAux.x = puntoBola.x + ((3*distanceX) / 4);
-   thirdPointAux.y = -reciviengHeight;
-   thirdPointAux.z = puntoBola.z + ((3*distanceZ) / 4);
-   ps[2] = new PVector(thirdPointAux.x,thirdPointAux.y,thirdPointAux.z);
-   
-   ps[3] = new PVector(destinationPoint.x,destinationPoint.y,destinationPoint.z);
-   
-   //recieveCurve.modifyPoints(pc);
 }
