@@ -14,7 +14,16 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       cam.setActive(freeCam);
     }
     break;
+  case 'p':    
+  case 'P':
+    if (!printCurves) {
+      printCurves = true;
+     
+    } else {
 
+      printCurves = false;
+    }
+    break;
   case 's':    
   case 'S':
     if (!isServing) {
