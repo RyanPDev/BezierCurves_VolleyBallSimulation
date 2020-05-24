@@ -8,10 +8,15 @@ import peasy.*;
 curvaBezier miPrimeraBezier;
 InterpolCurve recieveCurve; 
 InterpolCurve spikeCurve; 
+InterpolCurve blockCurve;
+InterpolCurve beginCurve;
+
 
 boolean mouseClick = false;
 boolean pointgrabbed = false;
 boolean printCurves = false;
+boolean playerWin = false;
+boolean endingComplete = false;
 
 // GameVariables
 PVector courtPos, courtSize, floorSize, courtInitPos;
@@ -50,7 +55,7 @@ Phase gamePhase; // La fase actual en la que se encuentra el juego
 Phase auxiliarPhase; // Variable que guarda la fase en la que el jugador se encuentra cuando le da al pause
 boolean isServing = false; // Variable de control para controlar el flujo de codigo cuando el juego está pausado
 boolean isIncreasing = false;
-boolean ballInGame = true;
+boolean ballInGame, initServing = true;
 
 boolean curveInGame = true;
 int iteracionDeBola = 50;
@@ -59,8 +64,9 @@ float incrementoBolaU = 1.0 /  iteracionDeBola;
 float u = 0;
 color ballColor = color(255, 165, 0);
 int ballCollided = 0;
+int auxPrevBallState = 0;
 boolean ballSpiked = false;
-boolean camera7;
+boolean camera7, camera8,camera9, spikerRecieve = false;
 
 PImage ballTexture;
 PShape ball;
@@ -102,11 +108,18 @@ void draw()
     {
       recieveCurve.pintaCurva();
       spikeCurve.pintaCurva();
+      
     }
   }
   for (int i = 0; i < arrayPlayers.length; i++)
   {
+    if(i == 0 && camera8)
+    {
+    }
+    else
+    {
     arrayPlayers[i].drawPlayer();
+    }
     arrayPlayers[i].calcCollisionBall();
     arrayPlayers[i].jumpPlayer();
   }
@@ -139,20 +152,55 @@ void serveBall()
   default:
     break;
   }
-
+  
+  if(initServing)
+  {
+    puntoBola =  beginCurve.calculameUnPunto(u);
+    
+    
+    if(u >= 1)
+    {
+       initServing = false;
+       u = 0;
+       iteracionDeBola = 50;
+       incrementoBolaU = 1.0 /  iteracionDeBola;
+    }
+    else if(u > 0.65 && arrayPlayers[0].pos.y >= -(playerHeight/2) - 200)
+    {
+      arrayPlayers[0].pos.y -= 10; 
+      arrayPlayers[0].pos.z += 5;
+    }
+    else
+    {
+       arrayPlayers[0].pos.z = puntoBola.z; 
+    }
+  }
+  else{
   if (ballInGame)
   {
     if (ballCollided == 0)
     {
+      if(arrayPlayers[0].pos.y <= -playerHeight/2)
+      {
+        arrayPlayers[0].pos.y += 10; 
+        arrayPlayers[0].pos.z += 5;
+      }
       puntoBola =  miPrimeraBezier.calculameUnPunto(u); 
     }
     else if(ballCollided == 1)
     {
-      
+      puntoBola = blockCurve.calculameUnPunto(u);
     }
     else
     {  
+      if(auxPrevBallState == 0)
+      {
       puntoBola =  miPrimeraBezier.calculameUnPunto(u); 
+      }
+      else
+      {
+        puntoBola = blockCurve.calculameUnPunto(u);
+      }
       if (millis() - ballFellTime >= timeForReset)
       {
        
@@ -166,35 +214,56 @@ void serveBall()
       puntoBola = recieveCurve.calculameUnPunto(u);
       if(u > 0.7)
       {
+        if(!spikerRecieve)
          arrayPlayers[7].makeJump = true; 
+         else
+         {
+           arrayPlayers[6].makeJump = true; 
+         }
       }
     } else
     {
       puntoBola = spikeCurve.calculameUnPunto(u);
     }
   }
+  
   if (puntoBola.y- ballSize > -ballSize)
   {
     puntoBola.y = -ballSize;
     if (ballCollided != 2)
     {
+      if(!endingComplete)
+      {
+        if((puntoBola.x <= courtSize.x/2 && puntoBola.x >= -courtSize.x/2) && (puntoBola.z > courtPos.z && puntoBola.z <= courtSize.z/2))
+        {
+            playerWin = true;
+            println("player WINS!!!!!!"); 
+            
+        }
+        else
+        {
+           println("player Lose"); 
+        }
+        endingComplete = true;
+      }
+      auxPrevBallState = ballCollided;
       ballFellTime = millis();
       ballCollided = 2;
     }
   }
-  if ( puntoBola.z < 20 && puntoBola.z > -20 && puntoBola.y >= -antenaHeight)
+  if ( puntoBola.z < 20 && puntoBola.z > -20 && puntoBola.y >= -antenaHeight && ballCollided == 0)
   {
     //stroke(0, 0, 255);
     ballCollided = 1;
-    //calcBlockCurve();
-    //u = 0;
+    calcBlockCurve();
+    u = 0;
   }
   // fill(ballColor);
 
-  
+  }
   u+= incrementoBolaU;
 
-  if ( u > 4 || ( !ballInGame && u > 1)) {
+  if ( (u > 4 || ( !ballInGame && u > 1)) && !initServing) {
     if (!ballInGame && !ballSpiked)
     {
       u = 0;
@@ -239,11 +308,17 @@ void mouseDragged()
 
     if (!mouseClick)
     {
+      arrayPlayers[0].pos = new PVector(courtInitPos.x + 200, -playerHeight / 2, courtInitPos.z - 500);
+      resetBallPos();
       mouseClick = true;
       miPrimeraBezier.lastMouseInput = new PVector(mouseX, mouseY, 0);
     }
     if (!freeCam && shouldModify)
+    {
+       playerWin = false;
+       endingComplete = false;
       miPrimeraBezier.moveControlPointsMouse(new PVector(mouseX, mouseY, 0), point);
+    }
   }
 }
 void mouseReleased()

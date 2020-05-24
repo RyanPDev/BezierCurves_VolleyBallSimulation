@@ -7,13 +7,15 @@ class Player
    boolean hasCollided;
    boolean goingUp;
    boolean makeJump;
+   boolean isSetter,isPlayer;
    
   
-   Player(PVector p, int pType, float h, float wX, float wZ)
+   Player(PVector p, int pType, float h, float wX, float wZ, boolean s)
    {
      pos = new PVector (0,0,0);
      initialPos = new PVector (0,0,0);
      
+     isSetter = s;
      pos = p;
      initialPos = p;
      
@@ -40,7 +42,7 @@ class Player
      
    }
    
-   
+  
    
    void jumpPlayer()
    {
@@ -67,8 +69,8 @@ class Player
          }
          else
          {
-          goingUp = true;
-         makeJump = false;
+           goingUp = true;
+           makeJump = false;
          }
          
        }
@@ -77,7 +79,7 @@ class Player
    
    void calcCollisionBall()
    {
-       if(playerType == 2 && ballInGame && gamePhase == Phase.SERVE && ballCollided == 0)
+       if(ballInGame && gamePhase == Phase.SERVE && ballCollided == 0)
        {
          if(puntoBola.y + ballSize >= -playerHeight)
          {
@@ -85,10 +87,21 @@ class Player
            {
               if(puntoBola.z + ballSize >= pos.z - pWidthZ && puntoBola.z - ballSize <= pos.z + pWidthZ)
               {
+                if(playerType == 2)
+                {
                 ballInGame = false;
+                
                 calcNewRecievingPoint();
+                
                 makeJump = true;
                 println("NICE RECIEEEEVE");
+                }
+                else if(playerType == 1)
+                {
+                   ballCollided = 1;
+                   calcBlockCurve();
+                   u = 0;
+                }
               }
            }
          }
@@ -97,6 +110,12 @@ class Player
    
    void calcNewRecievingPoint()
    {
+       float auxPos = destinationPoint.x;
+       if(isSetter)
+       {
+         spikerRecieve = true;
+         destinationPoint.x = arrayPlayers[6].pos.x;
+       }
        PVector [] pc;
        float distanceX,distanceZ;
        u = 0;
@@ -111,7 +130,7 @@ class Player
        pc[0] = new PVector(puntoBola.x,puntoBola.y,puntoBola.z);
        
        PVector secondPointAux = new PVector(0,0,0);
-       if(puntoBola.x < 0)
+       if(puntoBola.x < -100)
          secondPointAux.x = puntoBola.x + (distanceX / 4);
        else
        {
@@ -122,7 +141,7 @@ class Player
        pc[1] = new PVector(secondPointAux.x,secondPointAux.y,secondPointAux.z);
        
        PVector thirdPointAux = new PVector(0,0,0);
-       if(puntoBola.x < 0)
+       if(puntoBola.x < -100)
          thirdPointAux.x = puntoBola.x + ((3*distanceX) / 4);
          else
        {
@@ -135,11 +154,18 @@ class Player
        pc[3] = new PVector(destinationPoint.x,destinationPoint.y,destinationPoint.z);
        
        recieveCurve.modifyPoints(pc);
+       destinationPoint.x = auxPos;
      
    }
    
    void drawPlayer()
    {
+     if(isSetter && camera9)
+     {
+       
+     }
+     else
+     {
        pushMatrix();
        translate(pos.x,pos.y,pos.z);
        fill(playerColor);
@@ -148,7 +174,8 @@ class Player
        
        box(pWidthX,pHeight,pWidthZ);
        
-       popMatrix();
+       popMatrix(); 
+     }
    }
   
 }

@@ -28,6 +28,48 @@ PVector calculateVector(PVector pos1, PVector pos2) //Calcula un vector unitario
   return calculatedVector;
 }
 
+
+void calcFirstCurve()
+{
+   
+   PVector [] pf;
+   pf = new PVector[4];
+   pf[0] = new PVector(0,0,0);
+   pf[0].x = arrayPlayers[0].pos.x;
+   pf[0].y = arrayPlayers[0].pos.y;
+   pf[0].z = arrayPlayers[0].pos.z + playerWidthZ + ballSize;
+   
+   pf[3] = new PVector(courtInitPos.x + 200, -playerHeight - 200, courtInitPos.z);
+   
+   
+   
+   float distanceZ;
+   
+   /*distanceX = (destinationSpike.x - puntoBola.x);
+   distanceX = sqrt(sq(distanceX));
+   */
+   
+   
+   distanceZ = (pf[3].z - pf[0].z);
+   distanceZ = sqrt(sq(distanceZ));       
+   
+   
+   PVector secondPointAux = new PVector(0,0,0);
+   secondPointAux.x = puntoBola.x;
+   secondPointAux.y = puntoBola.y - 400;
+   secondPointAux.z = puntoBola.z + (distanceZ / 4);
+   pf[1] = new PVector(secondPointAux.x,secondPointAux.y,secondPointAux.z);
+   
+   PVector thirdPointAux = new PVector(0,0,0);
+   thirdPointAux.x = puntoBola.x;
+   thirdPointAux.y = puntoBola.y - 400;
+   thirdPointAux.z = puntoBola.z + ((3*distanceZ) / 4);
+   pf[2] = new PVector(thirdPointAux.x,thirdPointAux.y,thirdPointAux.z);
+      
+   beginCurve.modifyPoints(pf);
+   
+}
+
 void calcSpikeCurve()
 {
    PVector [] ps;
@@ -37,7 +79,7 @@ void calcSpikeCurve()
    distanceX = sqrt(sq(distanceX));
    
    distanceY = (destinationSpike.y - puntoBola.y);
-   distanceX = sqrt(sq(distanceX));
+   distanceY = sqrt(sq(distanceY));
    
    distanceZ = (destinationSpike.z - puntoBola.z);
    distanceZ = sqrt(sq(distanceZ));       
@@ -87,7 +129,7 @@ void calcBlockCurve()
    lastPointAux.z = puntoBola.z - 500;
    ps[3] = new PVector(lastPointAux.x,lastPointAux.y,lastPointAux.z);
    
-   spikeCurve.modifyPoints(ps);
+   blockCurve.modifyPoints(ps);
 }
 
 
