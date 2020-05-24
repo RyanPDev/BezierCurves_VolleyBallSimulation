@@ -56,7 +56,7 @@ int iteracionDeBola = 50;
 PVector puntoBola = new PVector(0, 0, 0);
 float incrementoBolaU = 1.0 /  iteracionDeBola;
 float u = 0;
-color ballColor = color(255,165,0);
+color ballColor = color(255, 165, 0);
 int ballCollided = 0;
 
 final int view1=1;
@@ -83,7 +83,6 @@ void setup()
 {
   size(800, 600, P3D);
   initGame();
-  
 }
 //ZONA DRAW
 
@@ -94,33 +93,27 @@ void draw()
   cameraAngle();
 
   if (gamePhase == Phase.SIMULATION) {
-      miPrimeraBezier.pintarCurva();
-      
-      
-     
-    } 
-    else if (gamePhase == Phase.SERVE) {
-      serveBall();
-      if(!ballInGame)
-        recieveCurve.pintaCurva();
-    }
-    for (int i = 0; i < arrayPlayers.length;i++)
-    {
-        arrayPlayers[i].drawPlayer();
-        arrayPlayers[i].calcCollisionBall();
-    }
-    
-    drawCourt();
-    drawHUD();
-  
-  
+    miPrimeraBezier.pintarCurva();
+  } else if (gamePhase == Phase.SERVE) {
+    serveBall();
+    if (!ballInGame)
+      recieveCurve.pintaCurva();
+  }
+  for (int i = 0; i < arrayPlayers.length; i++)
+  {
+    arrayPlayers[i].drawPlayer();
+    arrayPlayers[i].calcCollisionBall();
+  }
+
+  drawCourt();
+  drawHUD();
 }
 
 void serveBall()
 {
 
   pushMatrix();
- 
+
   switch(ballCollided)
   {
   case 0:
@@ -135,35 +128,32 @@ void serveBall()
   default:
     break;
   }
-  
-  if(ballInGame)
+
+  if (ballInGame)
   {
-    if(ballCollided != 2)
+    if (ballCollided != 2)
       puntoBola =  miPrimeraBezier.calculameUnPunto(u); 
     else
     {  
       puntoBola =  miPrimeraBezier.calculameUnPunto(u); 
-      if(millis() - ballFellTime >= timeForReset)
+      if (millis() - ballFellTime >= timeForReset)
       {
         println("STOP BECAUSE TIMER");
-          stopServing(); 
+        stopServing();
       }
     }
-  }
-  else if(ballCollided == 0)
+  } else if (ballCollided == 0)
   {
-     puntoBola = recieveCurve.calculameUnPunto(u);
-     
+    puntoBola = recieveCurve.calculameUnPunto(u);
   }
-  if(puntoBola.y- ballSize > -ballSize)
+  if (puntoBola.y- ballSize > -ballSize)
   {
     puntoBola.y = -ballSize;
-    if(ballCollided != 2)
+    if (ballCollided != 2)
     {
       ballFellTime = millis();
       ballCollided = 2;
     }
-    
   }
   if ( puntoBola.z < 20 && puntoBola.z > -20 && puntoBola.y >= -antenaHeight)
   {
@@ -171,8 +161,8 @@ void serveBall()
     ballCollided = 1;
   }
   fill(ballColor);
-  
- 
+
+
   translate(puntoBola.x, puntoBola.y, puntoBola.z);
   sphere(ballSize);
   u+= incrementoBolaU;
