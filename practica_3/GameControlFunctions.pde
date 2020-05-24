@@ -69,7 +69,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
   }
 }
 
-vo+id stopServing()
+void stopServing()
 {
   gamePhase = auxiliarPhase;
   isServing = false;

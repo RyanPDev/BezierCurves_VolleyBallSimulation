@@ -28,7 +28,9 @@ void cameraAngle()
 
   case view4:   
     updateCameraLookAt();
-    rotateY(radians(180));
+    translate(0, -900, -900);
+    rotateX(radians(-20));
+    rotateY(radians(240));
     break;
   }
 }

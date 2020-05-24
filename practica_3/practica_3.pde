@@ -124,7 +124,7 @@ void setup()
 void draw()
 {
   //TERRENO
-  background(255);
+  background(111);
   cameraAngle();
 
   if (gamePhase == Phase.SIMULATION) {
