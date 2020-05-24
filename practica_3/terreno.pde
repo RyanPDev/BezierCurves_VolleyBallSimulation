@@ -12,13 +12,42 @@ void drawCourt() {
 
   fill(255, 204, 0); 
   box(floorSize.x, floorSize.y, floorSize.z);
+  
+  
+  
+  fill(135,206,235); 
+  box(5000, floorSize.y/2, 5000);
 
   noStroke();
   fill(255);
   box(courtSize.x, courtSize.y + 0.1, courtLinesSize);
-
   pushMatrix();
-
+  stroke(0);
+  strokeWeight(2);
+     translate(1800, -150/2, 0);
+     fill(255, 224, 0); 
+    box(floorSize.x, -150, floorSize.z);
+    for(int i = 0; i< 3; i++)
+    {
+      translate(300, -150, 0);
+      box(floorSize.x, 150, floorSize.z);
+    }
+  popMatrix();
+  
+  pushMatrix();
+  
+    translate(-1800, -150/2, 0);
+    fill(255, 224, 0); 
+    box(floorSize.x, -150, floorSize.z);
+    for(int i = 0; i< 3; i++)
+    {
+      translate(-300, -150, 0);
+      box(floorSize.x, 150, floorSize.z);
+    }
+  popMatrix();
+  
+  pushMatrix();
+strokeWeight(8);
   translate(-distanceCenterAntena, -antenaHeight/2, 0);
   noStroke();
   fill(30, 144, 255);
