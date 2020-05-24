@@ -62,6 +62,35 @@ void calcSpikeCurve()
    spikeCurve.modifyPoints(ps);
 }
 
+void calcBlockCurve()
+{
+   PVector [] ps; 
+   
+   ps = new PVector[4];
+   ps[0] = new PVector(puntoBola.x,puntoBola.y,puntoBola.z);
+   
+   PVector secondPointAux = new PVector(0,0,0);
+   secondPointAux.x = puntoBola.x;
+   secondPointAux.y = puntoBola.y - 20;
+   secondPointAux.z = puntoBola.z - 200;
+   ps[1] = new PVector(secondPointAux.x,secondPointAux.y,secondPointAux.z);
+   
+   PVector thirdPointAux = new PVector(0,0,0);
+   thirdPointAux.x = puntoBola.x;
+   thirdPointAux.y = puntoBola.y + 200;
+   thirdPointAux.z = puntoBola.z - 400;
+   ps[2] = new PVector(thirdPointAux.x,thirdPointAux.y,thirdPointAux.z);
+   
+   PVector lastPointAux = new PVector(0,0,0);
+   lastPointAux.x = puntoBola.x;
+   lastPointAux.y = puntoBola.y + 600;
+   lastPointAux.z = puntoBola.z - 500;
+   ps[3] = new PVector(lastPointAux.x,lastPointAux.y,lastPointAux.z);
+   
+   spikeCurve.modifyPoints(ps);
+}
+
+
 PVector calculateUnitVector(PVector pos1, PVector pos2) //Calcula un vector unitario entre dos posiciones recibidas como parámetro
 {
   PVector calculatedVector;
