@@ -78,13 +78,23 @@ class Player
        pc[0] = new PVector(puntoBola.x,puntoBola.y,puntoBola.z);
        
        PVector secondPointAux = new PVector(0,0,0);
-       secondPointAux.x = puntoBola.x + (distanceX / 4);
+       if(puntoBola.x < 0)
+         secondPointAux.x = puntoBola.x + (distanceX / 4);
+       else
+       {
+         secondPointAux.x = puntoBola.x - (distanceX / 4);
+       }
        secondPointAux.y = -reciviengHeight;
        secondPointAux.z = puntoBola.z - (distanceZ / 4);
        pc[1] = new PVector(secondPointAux.x,secondPointAux.y,secondPointAux.z);
        
        PVector thirdPointAux = new PVector(0,0,0);
-       thirdPointAux.x = puntoBola.x + ((3*distanceX) / 4);
+       if(puntoBola.x < 0)
+         thirdPointAux.x = puntoBola.x + ((3*distanceX) / 4);
+         else
+       {
+         thirdPointAux.x = puntoBola.x - ((3*distanceX) / 4);
+       }
        thirdPointAux.y = -reciviengHeight;
        thirdPointAux.z = puntoBola.z - ((3*distanceZ) / 4);
        pc[2] = new PVector(thirdPointAux.x,thirdPointAux.y,thirdPointAux.z);
