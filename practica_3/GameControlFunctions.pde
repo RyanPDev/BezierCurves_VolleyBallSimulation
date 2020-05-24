@@ -18,7 +18,6 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
   case 'P':
     if (!printCurves) {
       printCurves = true;
-     
     } else {
 
       printCurves = false;
@@ -79,6 +78,14 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
 
   case '5':
     state = view5;
+    break;
+
+  case '6':
+    state = view6;
+    break;
+
+  case '7':
+    state = view7;
     break;
   }
 }
