@@ -59,9 +59,16 @@ float u = 0;
 color ballColor = color(255, 224, 60);
 int ballCollided = 0;
 
-final int frontView=1;
-final int sideView=2;
-int state = frontView;
+final int view1=1;
+final int view2=2;
+final int view3=3;
+final int view4=4;
+final int view5=5;
+final int view6=6;
+final int view7=7;
+final int view8=8;
+final int view9=9;
+int state = view1;
 
 //TIMER
 float timeForReset;
@@ -80,10 +87,9 @@ void setup()
 void draw()
 {
   //TERRENO
-  background(255);  
-  
+  background(111);
   cameraAngle();
-  
+
   if (gamePhase == Phase.SIMULATION) {
       miPrimeraBezier.pintarCurva();
       
