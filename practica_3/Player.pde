@@ -5,6 +5,8 @@ class Player
    int playerType;
    float pHeight, pWidthX,pWidthZ;
    boolean hasCollided;
+   boolean goingUp;
+   boolean makeJump;
    
   
    Player(PVector p, int pType, float h, float wX, float wZ)
@@ -32,15 +34,45 @@ class Player
      pHeight = h;
      pWidthX = wX;
      pWidthZ = wZ;
+     goingUp = true;
+     makeJump = false;
      hasCollided = true; // LUEGO CAMBIAR ESTO A FALSE
      
    }
    
    
    
-   void movePlayer()
+   void jumpPlayer()
    {
-     
+     if(makeJump)
+     {
+       float jumpVector =  destinationPoint.y - pos.y;
+        jumpVector = sqrt(sq(jumpVector));
+       if(goingUp)
+       {
+         if(pos.y > destinationPoint.y + playerHeight / 2)
+         {
+           pos.y -= jumpVector * 0.1; 
+         }
+         else
+         {
+           goingUp = false;
+         }
+       }
+       else
+       {
+         if(pos.y < -playerHeight / 2)
+         {
+           pos.y += jumpVector * 0.1; 
+         }
+         else
+         {
+          goingUp = true;
+         makeJump = false;
+         }
+         
+       }
+     }
    }
    
    void calcCollisionBall()
@@ -55,6 +87,7 @@ class Player
               {
                 ballInGame = false;
                 calcNewRecievingPoint();
+                
                 println("NICE RECIEEEEVE");
               }
            }

@@ -94,10 +94,8 @@ void draw()
   //TERRENO
   background(111);
   cameraAngle();
-
-  if (gamePhase == Phase.SIMULATION) {
-    miPrimeraBezier.pintarCurva();
-  } else if (gamePhase == Phase.SERVE) {
+  miPrimeraBezier.pintarCurva();
+  if (gamePhase == Phase.SERVE) {
     serveBall();
     if (!ballInGame)
     {
@@ -109,6 +107,7 @@ void draw()
   {
     arrayPlayers[i].drawPlayer();
     arrayPlayers[i].calcCollisionBall();
+    arrayPlayers[i].jumpPlayer();
   }
   pushMatrix();
   translate(puntoBola.x, puntoBola.y, puntoBola.z);
@@ -157,6 +156,10 @@ void serveBall()
     if (!ballSpiked)
     {
       puntoBola = recieveCurve.calculameUnPunto(u);
+      if(u > 0.7)
+      {
+         arrayPlayers[7].makeJump = true; 
+      }
     } else
     {
       puntoBola = spikeCurve.calculameUnPunto(u);
@@ -186,6 +189,7 @@ void serveBall()
     {
       u = 0;
       calcSpikeCurve();
+      
       ballSpiked = true;
       iteracionDeBola = 20;
       incrementoBolaU = 1.0 /  iteracionDeBola;
