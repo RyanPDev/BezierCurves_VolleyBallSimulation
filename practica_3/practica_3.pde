@@ -178,6 +178,8 @@ void serveBall()
 
 void mouseDragged()
 {
+  if(gamePhase == Phase.SIMULATION)
+  {
   int point = 0;
   shouldModify = true;
   switch(selectedPoint)
@@ -203,9 +205,13 @@ void mouseDragged()
   }
   if (!freeCam && shouldModify)
     miPrimeraBezier.moveControlPointsMouse(new PVector(mouseX, mouseY, 0), point);
+  }
 }
 void mouseReleased()
 {
+  if(gamePhase == Phase.SIMULATION)
+  {
   if (mouseClick)
     mouseClick = false;
+  }
 }

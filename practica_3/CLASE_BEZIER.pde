@@ -73,7 +73,11 @@ class curvaBezier {
          
          maxPosPoint[2].y = puntosDeControl[1].y + movingLimit;
          minPosPoint[2].y = puntosDeControl[1].y - movingLimit; 
-     
+         if(minPosPoint[2].y > -75)
+         {
+           minPosPoint[2].y = -75;
+           
+         }
         maxPosPoint[3].x = puntosDeControl[2].x;
         maxPosPoint[3].z = courtPos.z + (courtSize.z/2);
         //maxPosPoint[3].y = puntosDeControl[2].y + 100;
