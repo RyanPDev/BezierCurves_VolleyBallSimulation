@@ -12,11 +12,11 @@ void initGame()
 
 
 
-  initCurves();
+  
   timerReset();
 
   generatePlayers();
-
+  initCurves();
   noStroke();
   ballTexture = loadImage("ballT.png");
   ball = createShape(SPHERE, ballSize);
@@ -154,7 +154,7 @@ void initCurves()
 
   color c = color(255, 255, 0);
   PVector[] p = new PVector[4];
-  p[0] = new PVector(courtInitPos.x, -200, courtInitPos.z); // BEZIER SI PASA POR EL PRIMERO
+  p[0] =  new PVector(courtInitPos.x + 200, - playerHeight, courtInitPos.z - 200); // BEZIER SI PASA POR EL PRIMERO
   p[1] = new PVector(courtInitPos.x +100, -250, courtInitPos.z + courtSize.z / 3); // BEZIER NO PASA POR EL SEGUNDO
   p[2] = new PVector(courtInitPos.x +100, -270, courtInitPos.z + ( 2* courtSize.z / 3)); // BEZIER NO PASA POR EL TERCERO
   p[3] = new PVector(courtInitPos.x +100, -100, courtInitPos.z + ( 2* courtSize.z / 3) + 200); // BEZIER SI PASA POR EL ULTIMO

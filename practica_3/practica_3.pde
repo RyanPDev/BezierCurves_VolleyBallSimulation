@@ -140,8 +140,14 @@ void serveBall()
 
   if (ballInGame)
   {
-    if (ballCollided != 2)
+    if (ballCollided == 0)
+    {
       puntoBola =  miPrimeraBezier.calculameUnPunto(u); 
+    }
+    else if(ballCollided == 1)
+    {
+      
+    }
     else
     {  
       puntoBola =  miPrimeraBezier.calculameUnPunto(u); 
@@ -178,6 +184,8 @@ void serveBall()
   {
     //stroke(0, 0, 255);
     ballCollided = 1;
+    //calcBlockCurve();
+    //u = 0;
   }
   // fill(ballColor);
 

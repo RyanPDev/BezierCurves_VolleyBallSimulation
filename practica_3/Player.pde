@@ -87,7 +87,7 @@ class Player
               {
                 ballInGame = false;
                 calcNewRecievingPoint();
-                
+                makeJump = true;
                 println("NICE RECIEEEEVE");
               }
            }
