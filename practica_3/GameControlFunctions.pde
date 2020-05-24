@@ -3,7 +3,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
 
   switch(key) {
   case ' ':
-    if (gamePhase == Phase.SIMULATION) {
+    if (gamePhase == Phase.SIMULATION || gamePhase == Phase.SERVE) {
       if (!freeCam)
       {
         freeCam = true;
@@ -31,9 +31,11 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       ballCollided = 0;
       gamePhase = Phase.SERVE;
     } else {
-
+      resetBallPos();
       stopServing();
     }
+       playerWin = false;
+       endingComplete = false;
     break;
 
   case 'x':
@@ -87,23 +89,20 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
   case '7':
     state = view7;
     break;
+  case '8':
+    state = view8;
+    break;
+  case '9':
+    state = view9;
+    break;
   }
 }
 
 void stopServing()
 {
-
+  resetBooleans();
   gamePhase = auxiliarPhase;
-  isServing = false;
-  ballSpiked = false;
-  //ballFellTime = millis();
-  iteracionDeBola = 50;
-  incrementoBolaU = 1.0 /  iteracionDeBola;
-  curveInGame = true;
-  ballInGame = true;
-  ballCollided = 0;
-  //puntoBola = new PVector(0, 0, 0);
-  u = 0;
+ 
 }
 
 void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que se presiona una tecla

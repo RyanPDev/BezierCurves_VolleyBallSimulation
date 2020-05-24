@@ -21,6 +21,7 @@ void initGame()
   ballTexture = loadImage("ballT.png");
   ball = createShape(SPHERE, ballSize);
   ball.setTexture(ballTexture);
+  resetBooleans();
 }
 
 void loadTextures()
@@ -41,14 +42,14 @@ void generatePlayers()
 
   reciviengHeight = 500;
   ballSize = 32.5;
-
+  boolean thisIsASetter = false;
   for (int i = 0; i < 12; i++)
   {
     switch(i)
     {
     case 0:
       auxType = 0;
-      auxVector = new PVector(courtInitPos.x + 200, -playerHeight / 2, courtInitPos.z - 200);
+      auxVector = new PVector(courtInitPos.x + 200, -playerHeight / 2, courtInitPos.z - 500);
       break;
     case 1:
       auxType = 1;//
@@ -71,9 +72,11 @@ void generatePlayers()
       auxVector = new PVector(courtPos.x - ((3*(courtSize.x/2))/4), -playerHeight / 2, courtPos.z + (((courtSize.z/2))/4));
       break;
     case 7:
+      thisIsASetter = true;
       auxVector = new PVector(courtPos.x, -playerHeight / 2, courtPos.z + (((courtSize.z/2))/4));
       break;
     case 8:
+      thisIsASetter = false;
       auxVector = new PVector(courtPos.x + ((3*(courtSize.x/2))/4), -playerHeight / 2, courtPos.z + (((courtSize.z/2))/4));
       break;
     case 9:
@@ -95,9 +98,32 @@ void generatePlayers()
       auxType, 
       playerHeight, 
       playerWidthX, 
-      playerWidthZ
+      playerWidthZ,
+      thisIsASetter
       );
   }
+ resetBallPos();
+}
+
+void resetBooleans()
+{
+  initServing = true;
+  spikerRecieve = false;
+  isServing = false;
+  ballSpiked = false;
+  iteracionDeBola = 80;
+  incrementoBolaU = 1.0 /  iteracionDeBola;
+  curveInGame = true;
+  ballInGame = true;
+  ballCollided = 0;
+  u = 0;
+}
+
+void resetBallPos()
+{
+   puntoBola.x = arrayPlayers[0].pos.x;
+   puntoBola.y = arrayPlayers[0].pos.y;
+   puntoBola.z = arrayPlayers[0].pos.z + playerWidthZ + ballSize;
 }
 
 void timerReset()
@@ -146,17 +172,21 @@ void courtVariable()
 
 void initCurves()
 {
-
+  
+  beginCurve = new InterpolCurve(color(30));
+  calcFirstCurve();
+  
   destinationSpike = new PVector(0, 0, 0);
   destinationSpike = new PVector(courtPos.x - ((3*(courtSize.x/2))/4), 100, courtPos.z - ((3*(courtSize.z/2))/4));
 
   spikeCurve = new InterpolCurve(color(260, 21, 133));
-
+  blockCurve = new InterpolCurve(color(60, 22, 133));
   color c = color(255, 255, 0);
   PVector[] p = new PVector[4];
-  p[0] =  new PVector(courtInitPos.x + 200, - playerHeight, courtInitPos.z - 200); // BEZIER SI PASA POR EL PRIMERO
-  p[1] = new PVector(courtInitPos.x +100, -250, courtInitPos.z + courtSize.z / 3); // BEZIER NO PASA POR EL SEGUNDO
-  p[2] = new PVector(courtInitPos.x +100, -270, courtInitPos.z + ( 2* courtSize.z / 3)); // BEZIER NO PASA POR EL TERCERO
+  //p[0] =  new PVector(courtInitPos.x + 200, - playerHeight, courtInitPos.z - 200);
+  p[0] = new PVector(courtInitPos.x + 200, -playerHeight - 200, courtInitPos.z);          // BEZIER SI PASA POR EL PRIMERO
+  p[1] = new PVector(courtInitPos.x +100, -250, courtInitPos.z + courtSize.z / 3);             // BEZIER NO PASA POR EL SEGUNDO
+  p[2] = new PVector(courtInitPos.x +100, -270, courtInitPos.z + ( 2* courtSize.z / 3));       // BEZIER NO PASA POR EL TERCERO
   p[3] = new PVector(courtInitPos.x +100, -100, courtInitPos.z + ( 2* courtSize.z / 3) + 200); // BEZIER SI PASA POR EL ULTIMO
 
   // PUNTOS A PINTAR?
