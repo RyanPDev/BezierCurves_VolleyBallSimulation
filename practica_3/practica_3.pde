@@ -60,6 +60,7 @@ float u = 0;
 color ballColor = color(255, 165, 0);
 int ballCollided = 0;
 boolean ballSpiked = false;
+boolean camera7;
 
 PImage ballTexture;
 PShape ball;
@@ -111,7 +112,8 @@ void draw()
   }
   pushMatrix();
   translate(puntoBola.x, puntoBola.y, puntoBola.z);
-  shape(ball);
+  if (!camera7)
+    shape(ball);
   popMatrix();
   
   drawCourt();
