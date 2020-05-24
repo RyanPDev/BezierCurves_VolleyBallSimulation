@@ -28,7 +28,6 @@ PVector calculateVector(PVector pos1, PVector pos2) //Calcula un vector unitario
   return calculatedVector;
 }
 
-
 void calcSpikeCurve()
 {
    PVector [] ps;
@@ -62,7 +61,6 @@ void calcSpikeCurve()
    
    spikeCurve.modifyPoints(ps);
 }
-
 
 PVector calculateUnitVector(PVector pos1, PVector pos2) //Calcula un vector unitario entre dos posiciones recibidas como parámetro
 {
