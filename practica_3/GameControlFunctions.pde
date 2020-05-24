@@ -18,7 +18,6 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
   case 'P':
     if (!printCurves) {
       printCurves = true;
-     
     } else {
 
       printCurves = false;

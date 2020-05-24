@@ -8,8 +8,6 @@ void drawHUD() // Funcion que dibuja HUD
 
   rectMode(CORNERS);
 
-
-
   //fill(0, 255);
 
   textAlign(CENTER, CENTER);
