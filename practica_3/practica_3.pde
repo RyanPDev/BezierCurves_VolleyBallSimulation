@@ -10,15 +10,12 @@ boolean mouseClick = false;
 boolean pointgrabbed = false;
 
 // GameVariables
-PVector courtPos,courtSize, floorSize, courtInitPos;
+PVector courtPos, courtSize, floorSize, courtInitPos;
 float playerHeight, antenaHeight, antenaSize, courtLinesSize, distanceCenterAntena;
 int rows, cols, scl;
 
-PVector recievingPoint, destinationPoint, secondRecievingPoint,ThirdRecievingPoint;
+PVector recievingPoint, destinationPoint, secondRecievingPoint, ThirdRecievingPoint;
 float reciviengHeight, ballSize;
-
-
-
 
 //Cámara
 PGraphics3D g3;
@@ -39,8 +36,6 @@ boolean shouldModify;
 boolean changedSelectedObject = false;
 
 
-
-
 enum Phase {
   STARTING, SIMULATION, PAUSE, SERVE
 }; // Enumerador con los diferentes estados de la partida
@@ -50,13 +45,18 @@ boolean isServing = false; // Variable de control para controlar el flujo de cod
 boolean isIncreasing = false;
 
 
- boolean curveInGame = true;
- int iteracionDeBola = 50;
- PVector puntoBola = new PVector(0, 0, 0);
- float incrementoBolaU = 1.0 /  iteracionDeBola;
- float u = 0;
- color ballColor = color(255,224,60);
- int ballCollided = 0;
+boolean curveInGame = true;
+int iteracionDeBola = 50;
+PVector puntoBola = new PVector(0, 0, 0);
+float incrementoBolaU = 1.0 /  iteracionDeBola;
+float u = 0;
+color ballColor = color(255, 224, 60);
+int ballCollided = 0;
+
+final int frontView=1;
+final int sideView=2;
+int state = frontView;
+
 //ZONA SETUP
 
 void setup()
@@ -68,26 +68,26 @@ void setup()
   cam = new PeasyCam(this, 2800);
   cam.setMinimumDistance(50);
   cam.setMaximumDistance(2800);
-  cam.rotateX(45);  // rotate around the z-axis passing through the subject
+  cam.rotateX(45);  // rotate around the x-axis passing through the subject
   // cam.rotateZ(180);  // rotate around the z-axis passing through the subject
   ballSize = 65;
   animationTimeInMillis = 1000;
 
   cameraPhase = CamPhase.COURT;
-  
-  courtPos = new PVector(0,0,0);
-  floorSize = new PVector(0,0,0); 
-  courtSize = new PVector(900,1,1800);
-  
-  courtInitPos = new PVector (0,0,0);
+
+  courtPos = new PVector(0, 0, 0);
+  floorSize = new PVector(0, 0, 0); 
+  courtSize = new PVector(900, 1, 1800);
+
+  courtInitPos = new PVector (0, 0, 0);
   courtInitPos.x = courtPos.x- (courtSize.x/2);
   courtInitPos.y = courtPos.y- (courtSize.y/2);
   courtInitPos.z = courtPos.z- (courtSize.z/2);
-  
+
   floorSize.x = courtSize.x*1.5;
   floorSize.y = courtSize.y * 0.5;
   floorSize.z = courtSize.z*1.5;
-  
+
   antenaHeight = 243;
   antenaSize = 25;
   courtLinesSize = 25;
@@ -108,110 +108,124 @@ void setup()
   miPrimeraBezier = new curvaBezier(p, c, num);
 
   miPrimeraBezier.rearrangePoints();    
-  
-  updateCameraLookAt();
- // cam.setPitchRotationMode();
+
+  //updateCameraLookAt();
+  // cam.setPitchRotationMode();
 }
 //ZONA DRAW
 
 void draw()
 {
-  background(255);
-
-  if(gamePhase == Phase.SIMULATION)
-  {
-    miPrimeraBezier.pintarCurva();
-  }
-  else if(gamePhase == Phase.SERVE)
-  {
-     serveBall();
-  }
   //TERRENO
-  drawCourt();  
-  
-  drawHUD();
+  switch (state) {
+  case frontView: 
+    background(255);    
+    updateCameraLookAt();
+    rotateX(radians(20));
+    rotateY(radians(180));
+    if (gamePhase == Phase.SIMULATION) {
+      miPrimeraBezier.pintarCurva();
+    } else if (gamePhase == Phase.SERVE) {
+      serveBall();
+    }
+    drawCourt();
+    drawHUD();
+    break;
+
+  case sideView:
+    background(255);    
+    updateCameraLookAt();
+    rotateX(radians(20));
+    rotateY(radians(-90));
+    if (gamePhase == Phase.SIMULATION) {
+      miPrimeraBezier.pintarCurva();
+    } else if (gamePhase == Phase.SERVE) {
+      serveBall();
+    }
+    drawCourt();
+    drawHUD();
+    break;
+  }
 }
 
 void serveBall()
 {
-      
-      pushMatrix();
-      switch(ballCollided)
-      {
-        case 0:
-          stroke(ballColor);
-          break;
-        case 1:
-           stroke(0,0,255);
-          break;
-        case 2:
-           stroke(255,0,0);
-          break;
-        default:
-          break;
-      }
-      
-      puntoBola =  miPrimeraBezier.calculameUnPunto(u);  
-      if( puntoBola.z < 20 && puntoBola.z > -20 && puntoBola.y >= -antenaHeight)
-      {
-          stroke(0,0,255);
-          ballCollided = 1;
-      }
-      if(puntoBola.y >= 0)
-      {
-          stroke(255,0,0);
-          
-          ballCollided = 2;
-      }
-        translate(puntoBola.x, puntoBola.y, puntoBola.z);
-        sphere(ballSize);
-           u+= incrementoBolaU;
-      if ( u > 4) {
-        stopServing();
-      }
-    
-      popMatrix();
-      
-   
+
+  pushMatrix();
+  switch(ballCollided)
+  {
+  case 0:
+    stroke(ballColor);
+    break;
+  case 1:
+    stroke(0, 0, 255);
+    break;
+  case 2:
+    stroke(255, 0, 0);
+    break;
+  default:
+    break;
+  }
+
+  puntoBola =  miPrimeraBezier.calculameUnPunto(u);  
+  if ( puntoBola.z < 20 && puntoBola.z > -20 && puntoBola.y >= -antenaHeight)
+  {
+    stroke(0, 0, 255);
+    ballCollided = 1;
+  }
+  if (puntoBola.y >= 0)
+  {
+    stroke(255, 0, 0);
+
+    ballCollided = 2;
+  }
+  translate(puntoBola.x, puntoBola.y, puntoBola.z);
+  sphere(ballSize);
+  u+= incrementoBolaU;
+  if ( u > 4) {
+    stopServing();
+  }
+
+  popMatrix();
 }
 
 
 void mouseDragged()
 {
-  if(gamePhase == Phase.SIMULATION)
+  if (gamePhase == Phase.SIMULATION)
   {
-  int point = 0;
-  shouldModify = true;
-  switch(selectedPoint)
-  {
-  case DIRECCION:
-    point = 1;
-    break;
-  case EFECTO:
-    point = 2;
-    break;
-  case POTENCIA:
-    point = 3;
-    break;
-  default:
-    shouldModify = false;
-    break;
-  }
+    int point = 0;
+    shouldModify = true;
+    switch(selectedPoint)
+    {
+    case DIRECCION:
+      point = 1;
+      break;
+    case EFECTO:
+      point = 2;
+      break;
+    case POTENCIA:
+      point = 3;
+      break;
+    default:
+      shouldModify = false;
+      break;
+    }
 
-  if (!mouseClick)
-  {
-    mouseClick = true;
-    miPrimeraBezier.lastMouseInput = new PVector(mouseX, mouseY, 0);
-  }
-  if (!freeCam && shouldModify)
-    miPrimeraBezier.moveControlPointsMouse(new PVector(mouseX, mouseY, 0), point);
+    if (!mouseClick)
+    {
+      mouseClick = true;
+      miPrimeraBezier.lastMouseInput = new PVector(mouseX, mouseY, 0);
+    }
+    if (!freeCam && shouldModify)
+      miPrimeraBezier.moveControlPointsMouse(new PVector(mouseX, mouseY, 0), point);
   }
 }
 void mouseReleased()
 {
-  if(gamePhase == Phase.SIMULATION)
+  if (gamePhase == Phase.SIMULATION)
   {
-  if (mouseClick)
-    mouseClick = false;
+    if (mouseClick)
+      mouseClick = false;
   }
 }
