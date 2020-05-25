@@ -76,11 +76,11 @@ class Player
   {
     if (ballInGame && gamePhase == Phase.SERVE && ballCollided == 0)
     {
-      if (puntoBola.y + ballSize >= -playerHeight)
+      if (ballPos.y + ballSize >= -playerHeight)
       {
-        if (puntoBola.x + ballSize >= pos.x - pWidthX && puntoBola.x - ballSize <= pos.x + pWidthX)
+        if (ballPos.x + ballSize >= pos.x - pWidthX && ballPos.x - ballSize <= pos.x + pWidthX)
         {
-          if (puntoBola.z + ballSize >= pos.z - pWidthZ && puntoBola.z - ballSize <= pos.z + pWidthZ)
+          if (ballPos.z + ballSize >= pos.z - pWidthZ && ballPos.z - ballSize <= pos.z + pWidthZ)
           {
             if (playerType == 2)
             {
@@ -114,35 +114,35 @@ class Player
     float distanceX, distanceZ;
     u = 0;
 
-    distanceX = (destinationPoint.x - puntoBola.x);
+    distanceX = (destinationPoint.x - ballPos.x);
     distanceX = sqrt(sq(distanceX));
 
-    distanceZ = (destinationPoint.z - puntoBola.z);
+    distanceZ = (destinationPoint.z - ballPos.z);
     distanceZ = sqrt(sq(distanceZ));       
 
     pc = new PVector[4];
-    pc[0] = new PVector(puntoBola.x, puntoBola.y, puntoBola.z);
+    pc[0] = new PVector(ballPos.x, ballPos.y, ballPos.z);
 
     PVector secondPointAux = new PVector(0, 0, 0);
-    if (puntoBola.x < -100)
-      secondPointAux.x = puntoBola.x + (distanceX / 4);
+    if (ballPos.x < -100)
+      secondPointAux.x = ballPos.x + (distanceX / 4);
     else
     {
-      secondPointAux.x = puntoBola.x - (distanceX / 4);
+      secondPointAux.x = ballPos.x - (distanceX / 4);
     }
     secondPointAux.y = -reciviengHeight;
-    secondPointAux.z = puntoBola.z - (distanceZ / 4);
+    secondPointAux.z = ballPos.z - (distanceZ / 4);
     pc[1] = new PVector(secondPointAux.x, secondPointAux.y, secondPointAux.z);
 
     PVector thirdPointAux = new PVector(0, 0, 0);
-    if (puntoBola.x < -100)
-      thirdPointAux.x = puntoBola.x + ((3*distanceX) / 4);
+    if (ballPos.x < -100)
+      thirdPointAux.x = ballPos.x + ((3*distanceX) / 4);
     else
     {
-      thirdPointAux.x = puntoBola.x - ((3*distanceX) / 4);
+      thirdPointAux.x = ballPos.x - ((3*distanceX) / 4);
     }
     thirdPointAux.y = -reciviengHeight;
-    thirdPointAux.z = puntoBola.z - ((3*distanceZ) / 4);
+    thirdPointAux.z = ballPos.z - ((3*distanceZ) / 4);
     pc[2] = new PVector(thirdPointAux.x, thirdPointAux.y, thirdPointAux.z);
 
     pc[3] = new PVector(destinationPoint.x, destinationPoint.y, destinationPoint.z);

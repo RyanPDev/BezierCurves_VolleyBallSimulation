@@ -87,7 +87,7 @@ class InterpolCurve
     return puntoCalculado;
   }
 
-  void pintaCurva()  //SE LLAMA TODO EL RATO
+  void drawInterpolationCurve()  //SE LLAMA TODO EL RATO
   {
     if (!freeCam)
     {
