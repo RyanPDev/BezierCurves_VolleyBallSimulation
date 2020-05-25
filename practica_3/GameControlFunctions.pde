@@ -47,6 +47,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       ballCollided = 0;
       gamePhase = Phase.SERVE;
     } else {
+      arrayPlayers[0].pos.y = -(playerHeight/2);
       resetBallPos();
       stopServing();
     }
@@ -114,12 +115,6 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
   }
 }
 
-void stopServing()
-{
-  resetBooleans();
-  gamePhase = auxiliarPhase;
-}
-
 void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que se presiona una tecla
 {
 
@@ -129,5 +124,59 @@ void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que s
     {
       changedSelectedObject = false;
     }
+  }
+}
+
+void stopServing()
+{
+  resetBooleans();
+  impossibleServe = false;
+  gamePhase = auxiliarPhase;
+}
+
+void mouseDragged()
+{
+  if (gamePhase == Phase.SIMULATION)
+  {
+    int point = 0;
+    shouldModify = true;
+    switch(selectedPoint)
+    {
+    case DIRECCION:
+      point = 1;
+      break;
+    case EFECTO:
+      point = 2;
+      break;
+    case POTENCIA:
+      point = 3;
+      break;
+    default:
+      shouldModify = false;
+      break;
+    }
+
+    if (!mouseClick)
+    {
+      arrayPlayers[0].pos = new PVector(courtInitPos.x + 200, -playerHeight / 2, courtInitPos.z - 500);
+      resetBallPos();
+      playerWin = false;
+      endingComplete = false;
+      mouseClick = true;
+      serveCurve.lastMouseInput = new PVector(mouseX, mouseY, 0);
+    }
+    if (!freeCam && shouldModify)
+    {
+
+      serveCurve.moveControlPointsMouse(new PVector(mouseX, mouseY, 0), point);
+    }
+  }
+}
+void mouseReleased()
+{
+  if (gamePhase == Phase.SIMULATION)
+  {
+    if (mouseClick)
+      mouseClick = false;
   }
 }

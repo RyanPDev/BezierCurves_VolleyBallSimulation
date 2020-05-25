@@ -73,11 +73,7 @@ void drawHUD() // Funcion que dibuja HUD
   {
     textSize(22);
     fill(0, 255, 255);
-  } else
-  {
-    fill(205, 255, 255, 150);
-    rect( width - 180, height - 105, width - 18, height - 35);
-  }
+  } 
 
   text("EDIT MODE", (width - 100), height - 200);
   textSize(15);
@@ -86,7 +82,7 @@ void drawHUD() // Funcion que dibuja HUD
   if (selectedPoint == PointSelected.DIRECCION)
   {
     textSize(22);
-    fill(0, 255, 0);
+    fill(0, 100, 0);
   }
 
   text("DIRECTION", (width - 100), height - 150);
@@ -96,7 +92,7 @@ void drawHUD() // Funcion que dibuja HUD
   if (selectedPoint == PointSelected.EFECTO)
   {
     textSize(22);
-    fill(0, 0, 255);
+    fill(0, 0, 100);
   }
 
   text("ADDED SPIN", (width - 100), height - 110);
@@ -106,7 +102,7 @@ void drawHUD() // Funcion que dibuja HUD
   if (selectedPoint == PointSelected.POTENCIA)
   {
     textSize(22);
-    fill(255, 0, 0 );
+    fill(100, 0, 0 );
   }
 
   text("POWER", (width - 100), height - 60);

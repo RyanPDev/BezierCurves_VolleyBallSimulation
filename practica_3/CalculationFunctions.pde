@@ -1,3 +1,136 @@
+void serveBall()
+{
+  switch(ballCollided)
+  {
+  case 0:
+    stroke(ballColor);
+    break;
+  case 1:
+    stroke(0, 0, 255);
+    break;
+  case 2:
+    stroke(255, 0, 0);
+    break;
+  default:
+    break;
+  }
+
+  if (initServing)
+  {
+    ballPos =  beginCurve.calculameUnPunto(u);
+
+    if (u >= 1)
+    {
+      initServing = false;
+      u = 0;
+      ballIteration = 50;
+      ballIncrementU = 1.0 /  ballIteration;
+    } else if (u > 0.65 && arrayPlayers[0].pos.y >= -(playerHeight/2) - 200)
+    {
+      arrayPlayers[0].pos.y -= 10; 
+      arrayPlayers[0].pos.z += 5;
+    } else
+    {
+      arrayPlayers[0].pos.z = ballPos.z;
+    }
+  } else {
+    if (ballInGame)
+    {
+      if (ballCollided == 0)
+      {
+        if (arrayPlayers[0].pos.y <= -playerHeight/2)
+        {
+          arrayPlayers[0].pos.y += 10; 
+          arrayPlayers[0].pos.z += 5;
+        }
+        ballPos =  serveCurve.calculatePointBezier(u);
+      } else if (ballCollided == 1)
+      {
+        ballPos = blockCurve.calculameUnPunto(u);
+      } else
+      {  
+        if (auxPrevBallState == 0)
+        {
+          ballPos =  serveCurve.calculatePointBezier(u);
+        } else
+        {
+          ballPos = blockCurve.calculameUnPunto(u);
+        }
+        if (millis() - ballFellTime >= timeForReset)
+        {
+
+          stopServing();
+        }
+      }
+    } else
+    {
+      if (!ballSpiked)
+      {
+        ballPos = recieveCurve.calculameUnPunto(u);
+        if (u > 0.7)
+        {
+          if (!spikerRecieve)
+            arrayPlayers[7].makeJump = true; 
+          else
+          {
+            arrayPlayers[6].makeJump = true;
+          }
+        }
+      } else
+      {
+        ballPos = spikeCurve.calculameUnPunto(u);
+      }
+    }
+
+    if (ballPos.y- ballSize > -ballSize)
+    {
+      ballPos.y = -ballSize;
+      if (ballCollided != 2)
+      {
+        if (!endingComplete)
+        {
+          if ((ballPos.x <= courtSize.x/2 && ballPos.x >= -courtSize.x/2) && (ballPos.z > courtPos.z && ballPos.z <= courtSize.z/2))
+          {
+            playerWin = true;
+            println("player WINS!!!!!!");
+          } else
+          {
+            println("player Lose");
+          }
+          endingComplete = true;
+        }
+        auxPrevBallState = ballCollided;
+        ballFellTime = millis();
+        ballCollided = 2;
+      }
+    }
+    if ( ballPos.z < 20 && ballPos.z > -20 && ballPos.y >= -antenaHeight && ballCollided == 0)
+    {
+      //stroke(0, 0, 255);
+      ballCollided = 1;
+      calcBlockCurve();
+      u = 0;
+    }
+    // fill(ballColor);
+  }
+  u+= ballIncrementU;
+
+  if ( (u > 4 || ( !ballInGame && u > 1)) && !initServing) {
+    if (!ballInGame && !ballSpiked)
+    {
+      u = 0;
+      calcSpikeCurve();
+
+      ballSpiked = true;
+      ballIteration = 20;
+      ballIncrementU = 1.0 /  ballIteration;
+    } else
+    {
+      stopServing();
+    }
+  }
+}
+
 float calculateModuleVector(PVector vector) //Calcula un vector unitario entre dos posiciones recibidas como parámetro
 {
   float module = 0;
@@ -55,15 +188,15 @@ void calcFirstCurve()
 
 
   PVector secondPointAux = new PVector(0, 0, 0);
-  secondPointAux.x = puntoBola.x;
-  secondPointAux.y = puntoBola.y - 400;
-  secondPointAux.z = puntoBola.z + (distanceZ / 4);
+  secondPointAux.x = ballPos.x;
+  secondPointAux.y = ballPos.y - 400;
+  secondPointAux.z = ballPos.z + (distanceZ / 4);
   pf[1] = new PVector(secondPointAux.x, secondPointAux.y, secondPointAux.z);
 
   PVector thirdPointAux = new PVector(0, 0, 0);
-  thirdPointAux.x = puntoBola.x;
-  thirdPointAux.y = puntoBola.y - 400;
-  thirdPointAux.z = puntoBola.z + ((3*distanceZ) / 4);
+  thirdPointAux.x = ballPos.x;
+  thirdPointAux.y = ballPos.y - 400;
+  thirdPointAux.z = ballPos.z + ((3*distanceZ) / 4);
   pf[2] = new PVector(thirdPointAux.x, thirdPointAux.y, thirdPointAux.z);
 
   beginCurve.modifyPoints(pf);
@@ -74,28 +207,28 @@ void calcSpikeCurve()
   PVector [] ps;
   float distanceX, distanceZ, distanceY;
 
-  distanceX = (destinationSpike.x - puntoBola.x);
+  distanceX = (destinationSpike.x - ballPos.x);
   distanceX = sqrt(sq(distanceX));
 
-  distanceY = (destinationSpike.y - puntoBola.y);
+  distanceY = (destinationSpike.y - ballPos.y);
   distanceY = sqrt(sq(distanceY));
 
-  distanceZ = (destinationSpike.z - puntoBola.z);
+  distanceZ = (destinationSpike.z - ballPos.z);
   distanceZ = sqrt(sq(distanceZ));       
 
   ps = new PVector[4];
-  ps[0] = new PVector(puntoBola.x, puntoBola.y, puntoBola.z);
+  ps[0] = new PVector(ballPos.x, ballPos.y, ballPos.z);
 
   PVector secondPointAux = new PVector(0, 0, 0);
-  secondPointAux.x = puntoBola.x - (distanceX / 4);
-  secondPointAux.y = puntoBola.y + (distanceY / 4);
-  secondPointAux.z = puntoBola.z - (distanceZ / 4);
+  secondPointAux.x = ballPos.x - (distanceX / 4);
+  secondPointAux.y = ballPos.y + (distanceY / 4);
+  secondPointAux.z = ballPos.z - (distanceZ / 4);
   ps[1] = new PVector(secondPointAux.x, secondPointAux.y, secondPointAux.z);
 
   PVector thirdPointAux = new PVector(0, 0, 0);
-  thirdPointAux.x = puntoBola.x - ((3*distanceX) / 4);
-  thirdPointAux.y = puntoBola.y + ((3*distanceY) / 4);
-  thirdPointAux.z = puntoBola.z - ((3*distanceZ) / 4);
+  thirdPointAux.x = ballPos.x - ((3*distanceX) / 4);
+  thirdPointAux.y = ballPos.y + ((3*distanceY) / 4);
+  thirdPointAux.z = ballPos.z - ((3*distanceZ) / 4);
   ps[2] = new PVector(thirdPointAux.x, thirdPointAux.y, thirdPointAux.z);
 
   ps[3] = new PVector(destinationSpike.x, destinationSpike.y, destinationSpike.z);
@@ -108,24 +241,24 @@ void calcBlockCurve()
   PVector [] ps; 
 
   ps = new PVector[4];
-  ps[0] = new PVector(puntoBola.x, puntoBola.y, puntoBola.z);
+  ps[0] = new PVector(ballPos.x, ballPos.y, ballPos.z);
 
   PVector secondPointAux = new PVector(0, 0, 0);
-  secondPointAux.x = puntoBola.x;
-  secondPointAux.y = puntoBola.y - 20;
-  secondPointAux.z = puntoBola.z - 200;
+  secondPointAux.x = ballPos.x;
+  secondPointAux.y = ballPos.y - 20;
+  secondPointAux.z = ballPos.z - 200;
   ps[1] = new PVector(secondPointAux.x, secondPointAux.y, secondPointAux.z);
 
   PVector thirdPointAux = new PVector(0, 0, 0);
-  thirdPointAux.x = puntoBola.x;
-  thirdPointAux.y = puntoBola.y + 200;
-  thirdPointAux.z = puntoBola.z - 400;
+  thirdPointAux.x = ballPos.x;
+  thirdPointAux.y = ballPos.y + 200;
+  thirdPointAux.z = ballPos.z - 400;
   ps[2] = new PVector(thirdPointAux.x, thirdPointAux.y, thirdPointAux.z);
 
   PVector lastPointAux = new PVector(0, 0, 0);
-  lastPointAux.x = puntoBola.x;
-  lastPointAux.y = puntoBola.y + 600;
-  lastPointAux.z = puntoBola.z - 500;
+  lastPointAux.x = ballPos.x;
+  lastPointAux.y = ballPos.y + 600;
+  lastPointAux.z = ballPos.z - 500;
   ps[3] = new PVector(lastPointAux.x, lastPointAux.y, lastPointAux.z);
 
   blockCurve.modifyPoints(ps);

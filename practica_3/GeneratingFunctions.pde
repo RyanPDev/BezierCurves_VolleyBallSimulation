@@ -111,8 +111,8 @@ void resetBooleans()
   spikerRecieve = false;
   isServing = false;
   ballSpiked = false;
-  iteracionDeBola = 80;
-  incrementoBolaU = 1.0 /  iteracionDeBola;
+  ballIteration = 80;
+  ballIncrementU = 1.0 /  ballIteration;
   curveInGame = true;
   ballInGame = true;
   ballCollided = 0;
@@ -121,9 +121,9 @@ void resetBooleans()
 
 void resetBallPos()
 {
-  puntoBola.x = arrayPlayers[0].pos.x;
-  puntoBola.y = arrayPlayers[0].pos.y;
-  puntoBola.z = arrayPlayers[0].pos.z + playerWidthZ + ballSize;
+  ballPos.x = arrayPlayers[0].pos.x;
+  ballPos.y = arrayPlayers[0].pos.y;
+  ballPos.z = arrayPlayers[0].pos.z + playerWidthZ + ballSize;
 }
 
 void timerReset()
@@ -143,7 +143,7 @@ void camVariables()
 
   animationTimeInMillis = 1000;
 
-  cameraPhase = CamPhase.COURT;
+
 }
 
 void courtVariable()
@@ -192,9 +192,9 @@ void initCurves()
   // PUNTOS A PINTAR?
   float num = 50;
   // LLAMADA AL CONSTRUCTOR DE LA CURVA
-  miPrimeraBezier = new curvaBezier(p, c, num);
+  serveCurve = new BezierCurve(p, c, num);
 
-  miPrimeraBezier.rearrangePoints();    
+  serveCurve.rearrangePoints();    
 
   recieveCurve = new InterpolCurve(color(199, 21, 133));
 }
