@@ -63,27 +63,25 @@ void cameraAngle()
 
   case view7:
     float p;
-    PVector nextPos = new PVector(0,0,0);
+    PVector nextPos = new PVector(0, 0, 0);
     p = u;
     p += incrementoBolaU;
-    
-    if(ballInGame)
+
+    if (ballInGame)
     {
-      if(ballCollided != 1)
+      if (ballCollided != 1)
         nextPos = miPrimeraBezier.calculameUnPunto(1);
       else
         nextPos = blockCurve.calculameUnPunto(1);
-    }
-    else
+    } else
     {
-       if (!ballSpiked)
-        {
-          nextPos = recieveCurve.calculameUnPunto(1);
-        }
-        else
-        {
-          nextPos = spikeCurve.calculameUnPunto(1);
-        }
+      if (!ballSpiked)
+      {
+        nextPos = recieveCurve.calculameUnPunto(1);
+      } else
+      {
+        nextPos = spikeCurve.calculameUnPunto(1);
+      }
     }
     updateCameraLookAt();
     camera(puntoBola.x, puntoBola.y, puntoBola.z, nextPos.x, nextPos.y, nextPos.z, 0, 1, 0);
@@ -91,9 +89,9 @@ void cameraAngle()
     camera8 = false;
     camera9 = false;
     break;
-   case view8:
+  case view8:
     updateCameraLookAt();
-    if(initServing && !endingComplete)
+    if (initServing && !endingComplete)
       camera(arrayPlayers[0].pos.x, arrayPlayers[0].pos.y - 80, arrayPlayers[0].pos.z - 20, miPrimeraBezier.puntosDeControl[3].x, miPrimeraBezier.puntosDeControl[3].y, miPrimeraBezier.puntosDeControl[3].z, 0, 1, 0);
     else
       camera(arrayPlayers[0].pos.x, arrayPlayers[0].pos.y - 80, arrayPlayers[0].pos.z - 20, puntoBola.x, puntoBola.y, puntoBola.z, 0, 1, 0);
@@ -101,7 +99,7 @@ void cameraAngle()
     camera8 = true;
     camera9 = false;
     break;
-   case view9:
+  case view9:
     updateCameraLookAt();
     camera(arrayPlayers[7].pos.x, arrayPlayers[7].pos.y - 80, arrayPlayers[7].pos.z, puntoBola.x, puntoBola.y, puntoBola.z, 0, 1, 0);
     camera7 = false;
@@ -109,5 +107,4 @@ void cameraAngle()
     camera9 = true;
     break;
   }
-   
 }

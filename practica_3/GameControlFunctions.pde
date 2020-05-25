@@ -14,6 +14,21 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       cam.setActive(freeCam);
     }
     break;
+  case 'h':    
+  case 'H':
+
+    if (!showControls && gamePhase == Phase.SIMULATION && !endingComplete)
+    {
+      if (showRedArrow)
+      {
+        showRedArrow = false;  //Solo queremos enseñar la flecha roja la primera vez
+      }
+      showControls = true;
+    } else if (showControls)
+    {
+      showControls = false;
+    }
+    break;
   case 'p':    
   case 'P':
     if (!printCurves) {
@@ -26,6 +41,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
   case 's':    
   case 'S':
     if (!isServing) {
+      showControls = false;
       isServing = true;
       auxiliarPhase = gamePhase;
       ballCollided = 0;
@@ -34,8 +50,8 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       resetBallPos();
       stopServing();
     }
-       playerWin = false;
-       endingComplete = false;
+    playerWin = false;
+    endingComplete = false;
     break;
 
   case 'x':
@@ -102,7 +118,6 @@ void stopServing()
 {
   resetBooleans();
   gamePhase = auxiliarPhase;
- 
 }
 
 void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que se presiona una tecla

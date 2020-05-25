@@ -12,7 +12,7 @@ void initGame()
 
 
 
-  
+
   timerReset();
 
   generatePlayers();
@@ -98,11 +98,11 @@ void generatePlayers()
       auxType, 
       playerHeight, 
       playerWidthX, 
-      playerWidthZ,
+      playerWidthZ, 
       thisIsASetter
       );
   }
- resetBallPos();
+  resetBallPos();
 }
 
 void resetBooleans()
@@ -121,9 +121,9 @@ void resetBooleans()
 
 void resetBallPos()
 {
-   puntoBola.x = arrayPlayers[0].pos.x;
-   puntoBola.y = arrayPlayers[0].pos.y;
-   puntoBola.z = arrayPlayers[0].pos.z + playerWidthZ + ballSize;
+  puntoBola.x = arrayPlayers[0].pos.x;
+  puntoBola.y = arrayPlayers[0].pos.y;
+  puntoBola.z = arrayPlayers[0].pos.z + playerWidthZ + ballSize;
 }
 
 void timerReset()
@@ -172,10 +172,10 @@ void courtVariable()
 
 void initCurves()
 {
-  
+
   beginCurve = new InterpolCurve(color(30));
   calcFirstCurve();
-  
+
   destinationSpike = new PVector(0, 0, 0);
   destinationSpike = new PVector(courtPos.x - ((3*(courtSize.x/2))/4), 100, courtPos.z - ((3*(courtSize.z/2))/4));
 
