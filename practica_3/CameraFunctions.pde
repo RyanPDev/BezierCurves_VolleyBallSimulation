@@ -1,11 +1,11 @@
-void updateCameraLookAt() //Actualiza el modo de seguimiento de la camara
+void updateCameraLookAt() // Actualiza el modo de seguimiento de la camara
 {
   cam.lookAt(courtPos.x, courtPos.y, courtPos.z, animationTimeInMillis);
   rotateX(radians(20));
   rotateY(radians(180));
 }
 
-void cameraAngle()
+void cameraAngle() // Determina el angulo que tiene la camara en cada frame según su estado
 {
   switch (state) {
   case view1: 
@@ -42,7 +42,7 @@ void cameraAngle()
     camera9 = false;
     break;
 
-  case view5:
+  case view5: // Vista del arbitro
     updateCameraLookAt();
     camera(courtPos.x - 900, courtPos.y - 1000, courtPos.z, ballPos.x, ballPos.y, ballPos.z, 0, 1, 0);
     camera7 = false;
@@ -50,7 +50,7 @@ void cameraAngle()
     camera9 = false;
     break;
 
-  case view6:
+  case view6: // Vista de espectador (gradas)
     updateCameraLookAt();
     camera(courtPos.x - 1350, courtPos.y - 600, courtPos.z, ballPos.x, ballPos.y, ballPos.z, 0, 1, 0);
     camera7 = false;
@@ -58,26 +58,26 @@ void cameraAngle()
     camera9 = false;
     break;
 
-  case view7:
-    float p;
+  case view7: // Vista de la bola
+    //float p;
     PVector nextPos = new PVector(0, 0, 0);
-    p = u;
-    p += ballIncrementU;
+  //  p = u;
+  //  p += ballIncrementU;
 
     if (ballInGame)
     {
       if (ballCollided != 1)
         nextPos = serveCurve.calculatePointBezier(1);
       else
-        nextPos = blockCurve.calculameUnPunto(1);
+        nextPos = blockCurve.calculateInterpolPoint(1);
     } else
     {
       if (!ballSpiked)
       {
-        nextPos = recieveCurve.calculameUnPunto(1);
+        nextPos = recieveCurve.calculateInterpolPoint(1);
       } else
       {
-        nextPos = spikeCurve.calculameUnPunto(1);
+        nextPos = spikeCurve.calculateInterpolPoint(1);
       }
     }
     updateCameraLookAt();
@@ -86,7 +86,7 @@ void cameraAngle()
     camera8 = false;
     camera9 = false;
     break;
-  case view8:
+  case view8: // vista del jugador en primera persona
     updateCameraLookAt();
     if (initServing && !endingComplete)
       camera(arrayPlayers[0].pos.x, arrayPlayers[0].pos.y - 80, arrayPlayers[0].pos.z - 20, serveCurve.bezierControlPoints[3].x, serveCurve.bezierControlPoints[3].y, serveCurve.bezierControlPoints[3].z, 0, 1, 0);
@@ -96,7 +96,7 @@ void cameraAngle()
     camera8 = true;
     camera9 = false;
     break;
-  case view9:
+  case view9: // Vista del capitan enemigo
     updateCameraLookAt();
     camera(arrayPlayers[7].pos.x, arrayPlayers[7].pos.y - 80, arrayPlayers[7].pos.z, ballPos.x, ballPos.y, ballPos.z, 0, 1, 0);
     camera7 = false;
