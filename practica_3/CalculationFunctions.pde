@@ -1,4 +1,4 @@
-void serveBall()
+void serveSimulation() // Funcion que controla toda la simulacion de la bola y las diferentes curvas
 {
   switch(ballCollided)
   {
@@ -17,7 +17,7 @@ void serveBall()
 
   if (initServing)
   {
-    ballPos =  beginCurve.calculameUnPunto(u);
+    ballPos =  beginCurve.calculateInterpolPoint(u); //--> Pestaña InterpolClass
 
     if (u >= 1)
     {
@@ -43,30 +43,30 @@ void serveBall()
           arrayPlayers[0].pos.y += 10; 
           arrayPlayers[0].pos.z += 5;
         }
-        ballPos =  serveCurve.calculatePointBezier(u);
+        ballPos =  serveCurve.calculatePointBezier(u); //--> Pestaña BezierClass
       } else if (ballCollided == 1)
       {
-        ballPos = blockCurve.calculameUnPunto(u);
+        ballPos = blockCurve.calculateInterpolPoint(u); //--> Pestaña InterpolClass
       } else
       {  
         if (auxPrevBallState == 0)
         {
-          ballPos =  serveCurve.calculatePointBezier(u);
+          ballPos =  serveCurve.calculatePointBezier(u); //--> Pestaña InterpolClass
         } else
         {
-          ballPos = blockCurve.calculameUnPunto(u);
+          ballPos = blockCurve.calculateInterpolPoint(u); //--> Pestaña InterpolClass
         }
         if (millis() - ballFellTime >= timeForReset)
         {
 
-          stopServing();
+          stopServing(); //--> Pestaña GameControlFunctions
         }
       }
     } else
     {
       if (!ballSpiked)
       {
-        ballPos = recieveCurve.calculameUnPunto(u);
+        ballPos = recieveCurve.calculateInterpolPoint(u); //--> Pestaña InterpolClass
         if (u > 0.7)
         {
           if (!spikerRecieve)
@@ -78,7 +78,7 @@ void serveBall()
         }
       } else
       {
-        ballPos = spikeCurve.calculameUnPunto(u);
+        ballPos = spikeCurve.calculateInterpolPoint(u); //--> Pestaña InterpolClass
       }
     }
 
@@ -92,10 +92,10 @@ void serveBall()
           if ((ballPos.x <= courtSize.x/2 && ballPos.x >= -courtSize.x/2) && (ballPos.z > courtPos.z && ballPos.z <= courtSize.z/2))
           {
             playerWin = true;
-            println("player WINS!!!!!!");
+            // Player wins C:
           } else
           {
-            println("player Lose");
+            // Player loses :C
           }
           endingComplete = true;
         }
@@ -106,12 +106,10 @@ void serveBall()
     }
     if ( ballPos.z < 20 && ballPos.z > -20 && ballPos.y >= -antenaHeight && ballCollided == 0)
     {
-      //stroke(0, 0, 255);
       ballCollided = 1;
       calcBlockCurve();
       u = 0;
     }
-    // fill(ballColor);
   }
   u+= ballIncrementU;
 
@@ -126,7 +124,7 @@ void serveBall()
       ballIncrementU = 1.0 /  ballIteration;
     } else
     {
-      stopServing();
+      stopServing(); //--> Pestaña GameControlFunctions
     }
   }
 }
@@ -162,7 +160,7 @@ PVector calculateVector(PVector pos1, PVector pos2) //Calcula un vector unitario
 }
 
 
-void calcFirstCurve()
+void calcFirstCurve() // Calcula la curva que hace la bola cuando el jugador la lanza para arriba antes de realizar el golpe para sacar
 {
 
   PVector [] pf;
@@ -178,14 +176,8 @@ void calcFirstCurve()
 
   float distanceZ;
 
-  /*distanceX = (destinationSpike.x - puntoBola.x);
-   distanceX = sqrt(sq(distanceX));
-   */
-
-
   distanceZ = (pf[3].z - pf[0].z);
   distanceZ = sqrt(sq(distanceZ));       
-
 
   PVector secondPointAux = new PVector(0, 0, 0);
   secondPointAux.x = ballPos.x;
@@ -199,10 +191,10 @@ void calcFirstCurve()
   thirdPointAux.z = ballPos.z + ((3*distanceZ) / 4);
   pf[2] = new PVector(thirdPointAux.x, thirdPointAux.y, thirdPointAux.z);
 
-  beginCurve.modifyPoints(pf);
+  beginCurve.modifyPoints(pf); //--> Pestaña InterpolClass
 }
 
-void calcSpikeCurve()
+void calcSpikeCurve() // Calcula la curva que sucede cuando el jugador contrario realiza un mate. Usamos esta basa de dos puntos ya que el mate es recto, los 2 restantes se determinan usando la equacion vectorial de la recta que forman los puntos
 {
   PVector [] ps;
   float distanceX, distanceZ, distanceY;
@@ -233,10 +225,10 @@ void calcSpikeCurve()
 
   ps[3] = new PVector(destinationSpike.x, destinationSpike.y, destinationSpike.z);
 
-  spikeCurve.modifyPoints(ps);
+  spikeCurve.modifyPoints(ps); //--> Pestaña InterpolClass
 }
 
-void calcBlockCurve()
+void calcBlockCurve() // Calcula la curva que usa la bola para cuando choca o con la propia red o cuando choca con un jugador aliado
 {
   PVector [] ps; 
 
@@ -261,11 +253,11 @@ void calcBlockCurve()
   lastPointAux.z = ballPos.z - 500;
   ps[3] = new PVector(lastPointAux.x, lastPointAux.y, lastPointAux.z);
 
-  blockCurve.modifyPoints(ps);
+  blockCurve.modifyPoints(ps); //--> Pestaña InterpolClass
 }
 
 
-PVector calculateUnitVector(PVector pos1, PVector pos2) //Calcula un vector unitario entre dos posiciones recibidas como parámetro
+PVector calculateUnitVector(PVector pos1, PVector pos2) // Calcula un vector unitario entre dos posiciones recibidas como parámetro
 {
   PVector calculatedVector;
   calculatedVector = new PVector(0, 0, 0);

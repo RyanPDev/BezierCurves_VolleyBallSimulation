@@ -2,7 +2,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
 {
 
   switch(key) {
-  case ' ':
+  case ' ': // Controla si se pueden editar los puntos
     if (gamePhase == Phase.SIMULATION || gamePhase == Phase.SERVE) {
       if (!freeCam)
       {
@@ -15,8 +15,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
     }
     break;
   case 'h':    
-  case 'H':
-
+  case 'H': // Enseña o esconde los controles de la simulación;
     if (!showControls && gamePhase == Phase.SIMULATION && !endingComplete)
     {
       if (showRedArrow)
@@ -29,16 +28,7 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
       showControls = false;
     }
     break;
-  case 'p':    
-  case 'P':
-    if (!printCurves) {
-      printCurves = true;
-    } else {
-
-      printCurves = false;
-    }
-    break;
-  case 's':    
+  case 's':    // Empieza el saque o lo para
   case 'S':
     if (!isServing) {
       showControls = false;
@@ -56,29 +46,29 @@ void keyPressed() // Funcion propia de Processing que se ejecuta cada vez que se
     break;
 
   case 'x':
-  case 'X':
+  case 'X': // Modifica que punto se está cambiando
   case 'c':
   case 'C':
     if (gamePhase == Phase.SIMULATION) {
       if (!changedSelectedObject) {
         changedSelectedObject = true;
-        if (selectedPoint == PointSelected.DIRECCION)
+        if (selectedPoint == PointSelected.DIRECTION)
         {
-          selectedPoint = PointSelected.EFECTO;
-        } else if (selectedPoint == PointSelected.EFECTO)
+          selectedPoint = PointSelected.SPIN;
+        } else if (selectedPoint == PointSelected.SPIN)
         {
-          selectedPoint = PointSelected.POTENCIA;
-        } else if (selectedPoint == PointSelected.POTENCIA)
+          selectedPoint = PointSelected.POWER;
+        } else if (selectedPoint == PointSelected.POWER)
         {
-          selectedPoint = PointSelected.DIRECCION;
+          selectedPoint = PointSelected.DIRECTION;
         } else if (selectedPoint == PointSelected.NONE)
         {
-          selectedPoint = PointSelected.DIRECCION;
+          selectedPoint = PointSelected.DIRECTION;
         }
       }
     }
     break;
-
+ // Cambia los diferentes estados de la camara
   case '1':
     state = view1;
     break;
@@ -127,9 +117,9 @@ void keyReleased() // Funcion propia de Processing que se ejecuta cada vez que s
   }
 }
 
-void stopServing()
+void stopServing() // Para la ejecucion del saque
 {
-  resetBooleans();
+  resetBooleans(); //--> Pestaña GeneratingFunctions
   impossibleServe = false;
   gamePhase = auxiliarPhase;
 }
@@ -142,13 +132,13 @@ void mouseDragged()
     shouldModify = true;
     switch(selectedPoint)
     {
-    case DIRECCION:
+    case DIRECTION:
       point = 1;
       break;
-    case EFECTO:
+    case SPIN:
       point = 2;
       break;
-    case POTENCIA:
+    case POWER:
       point = 3;
       break;
     default:
@@ -159,7 +149,7 @@ void mouseDragged()
     if (!mouseClick)
     {
       arrayPlayers[0].pos = new PVector(courtInitPos.x + 200, -playerHeight / 2, courtInitPos.z - 500);
-      resetBallPos();
+      resetBallPos(); //--> Pestaña GeneratingFunctions
       playerWin = false;
       endingComplete = false;
       mouseClick = true;
@@ -167,8 +157,7 @@ void mouseDragged()
     }
     if (!freeCam && shouldModify)
     {
-
-      serveCurve.moveControlPointsMouse(new PVector(mouseX, mouseY, 0), point);
+      serveCurve.moveControlPointsMouse(new PVector(mouseX, mouseY, 0), point); //--> Pestaña BezierClass
     }
   }
 }

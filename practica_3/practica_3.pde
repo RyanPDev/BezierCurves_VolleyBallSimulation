@@ -40,6 +40,7 @@ float u = 0;
 color ballColor = color(255, 165, 0);
 int ballCollided = 0;
 int auxPrevBallState = 0;
+int numOfBleachers = 6; // Numero de gradas del estadio
 
 PImage ballTexture;
 PShape ball;
@@ -55,7 +56,7 @@ PeasyCam cam;
 
 // Enums
 enum PointSelected {
-  NONE, DIRECCION, EFECTO, POTENCIA;
+  NONE, DIRECTION, SPIN, POWER;
 };
 PointSelected selectedPoint;
 enum Phase {
@@ -101,7 +102,7 @@ void draw()
   serveCurve.drawBezierCurve(); // --> Pestaña BezierClass
   if (gamePhase == Phase.SERVE) {
     
-    serveBall(); // --> Pestaña CalculationFunctions
+    serveSimulation(); // --> Pestaña CalculationFunctions
     beginCurve.drawInterpolationCurve(); // --> Pestaña InterpolClass
     if (ballCollided == 1)
       blockCurve.drawInterpolationCurve(); // --> Pestaña InterpolClass

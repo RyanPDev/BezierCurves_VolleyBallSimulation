@@ -70,11 +70,11 @@ class BezierCurve {
     minPosPoint[1].y = initialPoint[1].y - movingLimit;
 
 
-    maxPosPoint[2].x = bezierControlPoints[1].x + movingLimit - 220;
+    maxPosPoint[2].x = bezierControlPoints[1].x + movingLimit;
     minPosPoint[2].x = bezierControlPoints[1].x - movingLimit; 
 
 
-    maxPosPoint[2].y = bezierControlPoints[1].y + movingLimit;
+    maxPosPoint[2].y = bezierControlPoints[1].y + movingLimit- 220;
     minPosPoint[2].y = bezierControlPoints[1].y - movingLimit; 
     if (minPosPoint[2].y > -75)
     {
@@ -248,21 +248,21 @@ class BezierCurve {
       color auxColor = color(0);
       switch(selectedPoint)
       {
-         case DIRECCION:
+         case DIRECTION:
            i = 1;
            pX = 100;
            pY = 100;
            pZ = 0;
            auxColor = color(0, 100, 0);
            break;
-         case EFECTO:
+         case SPIN:
            i = 2;
            pX = 100;
            pY = 100;
            pZ = 0;
            auxColor = color(0, 0, 100);
            break;
-         case POTENCIA:
+         case POWER:
            i = 3;
            pX = 100;
            pY = 0;
@@ -295,14 +295,13 @@ class BezierCurve {
       for (float u= 0; u<= 4 && curveInGame; u += incrementoU)
       {
         auxPoint = calculatePointBezier(u); 
-        //punto.z < 220 && punto.z > -220 &&
+        
         if ( auxPoint.z < 20 && auxPoint.z > -20 && auxPoint.y >= -antenaHeight)
         {
           stroke(0, 0, 255);
         }
         if (auxPoint.y >= 0)
         {
-          //curveInGame=false;
           stroke(255, 0, 0);
         }
         point(auxPoint.x, auxPoint.y, auxPoint.z);

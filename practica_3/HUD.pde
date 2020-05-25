@@ -61,10 +61,6 @@ void drawHUD() // Funcion que dibuja HUD
 
   rectMode(CORNERS);
 
-
-
-  //fill(0, 255);
-
   textAlign(CENTER, CENTER);
   textSize(15); 
   fill(0);
@@ -79,7 +75,7 @@ void drawHUD() // Funcion que dibuja HUD
   textSize(15);
   fill(0, 255);
 
-  if (selectedPoint == PointSelected.DIRECCION)
+  if (selectedPoint == PointSelected.DIRECTION)
   {
     textSize(22);
     fill(0, 100, 0);
@@ -89,7 +85,7 @@ void drawHUD() // Funcion que dibuja HUD
   textSize(15);
   fill(0);
 
-  if (selectedPoint == PointSelected.EFECTO)
+  if (selectedPoint == PointSelected.SPIN)
   {
     textSize(22);
     fill(0, 0, 100);
@@ -99,7 +95,7 @@ void drawHUD() // Funcion que dibuja HUD
   textSize(15);
   fill(0);
 
-  if (selectedPoint == PointSelected.POTENCIA)
+  if (selectedPoint == PointSelected.POWER)
   {
     textSize(22);
     fill(100, 0, 0 );
@@ -114,8 +110,6 @@ void drawHUD() // Funcion que dibuja HUD
     textSize(30);
     strokeWeight(8);
     fill(255);
-
-
     if (playerWin)
     {
       for (int i = 0; i < 6; i++)
