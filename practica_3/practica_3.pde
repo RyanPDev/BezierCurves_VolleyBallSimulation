@@ -1,75 +1,69 @@
 import peasy.*;
-// CODIGO QUE IMPLEMENTA UNA CURVA DE BEZIER
-// QUE TIENE CONTINUIDAD C1 QUE ES MEJOR QUE C0
 
 
-// ZONA DE VARIABLES Y OBJETOS
+// CURVES
 
-curvaBezier miPrimeraBezier;
+BezierCurve serveCurve;
 InterpolCurve recieveCurve; 
 InterpolCurve spikeCurve; 
 InterpolCurve blockCurve;
 InterpolCurve beginCurve;
 
+// BOOLEANS
 
 boolean mouseClick = false;
 boolean pointgrabbed = false;
 boolean printCurves = false;
 boolean playerWin = false;
 boolean endingComplete = false;
-
-// GameVariables
-PVector courtPos, courtSize, floorSize, courtInitPos;
-float playerHeight, playerWidthX, playerWidthZ, antenaHeight, antenaSize, courtLinesSize, distanceCenterAntena;
-int rows, cols, netScale;
-
-PVector recievingPoint, destinationPoint, destinationSpike;
-float reciviengHeight, ballSize;
-
-Player[] arrayPlayers;
-
-
-//Cámara
-PGraphics3D g3;
-PeasyCam cam;
-enum CamPhase {
-  COURT, FIRSTPOINT, SECONDPOINT, LASTPOINT
-}; // Enumerador con los diferentes estados de la camara
-CamPhase cameraPhase; // La fase actual de la camara en la que se encuentra el juego
 boolean freeCam = false;
-long animationTimeInMillis; // Tiempo que tarda la camara en alcanzar el objetivo a mirar
-
-enum PointSelected {
-  NONE, DIRECCION, EFECTO, POTENCIA;
-};
-
-PointSelected selectedPoint;
-boolean shouldModify;
-boolean changedSelectedObject = false;
-
-
-enum Phase {
-  STARTING, SIMULATION, PAUSE, SERVE
-}; // Enumerador con los diferentes estados de la partida
-Phase gamePhase; // La fase actual en la que se encuentra el juego
-Phase auxiliarPhase; // Variable que guarda la fase en la que el jugador se encuentra cuando le da al pause
 boolean isServing = false; // Variable de control para controlar el flujo de codigo cuando el juego está pausado
 boolean isIncreasing = false;
 boolean ballInGame, initServing, showRedArrow = true;
-
+boolean impossibleServe = false;
 boolean curveInGame = true;
-int iteracionDeBola = 50;
-PVector puntoBola = new PVector(0, 0, 0);
-float incrementoBolaU = 1.0 /  iteracionDeBola;
+boolean shouldModify;
+boolean changedSelectedObject = false;
+boolean ballSpiked = false;
+boolean camera7, camera8, camera9, spikerRecieve, showControls = false;
+
+// GameVariables
+
+PVector courtPos, courtSize, floorSize, courtInitPos, recievingPoint, destinationPoint, destinationSpike;
+float playerHeight, playerWidthX, playerWidthZ, antenaHeight, antenaSize, courtLinesSize, distanceCenterAntena,reciviengHeight, ballSize;;
+int rows, cols, netScale;
+long animationTimeInMillis;
+int ballIteration = 50;
+PVector ballPos = new PVector(0, 0, 0);
+float ballIncrementU = 1.0 /  ballIteration;
 float u = 0;
 color ballColor = color(255, 165, 0);
 int ballCollided = 0;
 int auxPrevBallState = 0;
-boolean ballSpiked = false;
-boolean camera7, camera8, camera9, spikerRecieve, showControls = false;
+int numOfBleachers = 6; // Numero de gradas del estadio
 
 PImage ballTexture;
 PShape ball;
+
+// GameObjects
+
+    //Players
+Player[] arrayPlayers;
+
+    //Camera
+PGraphics3D g3;
+PeasyCam cam;
+
+// Enums
+enum PointSelected {
+  NONE, DIRECTION, SPIN, POWER;
+};
+PointSelected selectedPoint;
+enum Phase {
+  STARTING, SIMULATION, PAUSE, SERVE
+}; // Enumerador con los diferentes estados de la partida
+Phase gamePhase; // La fase actual en la que se encuentra el juego
+Phase auxiliarPhase; // Variable que guarda la fase en la que el jugador se encuentra cuando saca
 
 final int view1=1;
 final int view2=2;
@@ -95,30 +89,27 @@ String addingControlText = "Drag the mouse UP and SIDEWAYS to move\n the selecte
 String cameraControlsText= "\n                                                        -Press 'H' to hide controls-";
 
 
-//ZONA SETUP
-
 void setup()
 {
   size(800, 600, P3D);
-  initGame();
+  initGame(); // --> Pestaña GeneratingFunctions
 }
-//ZONA DRAW
 
 void draw()
 {
-  //TERRENO
   background(111);
-  cameraAngle();
-  miPrimeraBezier.pintarCurva();
+  cameraAngle(); // --> Pestaña CameraFunctions
+  serveCurve.drawBezierCurve(); // --> Pestaña BezierClass
   if (gamePhase == Phase.SERVE) {
-    serveBall();
-    beginCurve.pintaCurva();
+    
+    serveSimulation(); // --> Pestaña CalculationFunctions
+    beginCurve.drawInterpolationCurve(); // --> Pestaña InterpolClass
     if (ballCollided == 1)
-      blockCurve.pintaCurva();
+      blockCurve.drawInterpolationCurve(); // --> Pestaña InterpolClass
     if (!ballInGame)
     {
-      recieveCurve.pintaCurva();
-      spikeCurve.pintaCurva();
+      recieveCurve.drawInterpolationCurve(); // --> Pestaña InterpolClass
+      spikeCurve.drawInterpolationCurve(); // --> Pestaña InterpolClass
     }
   }
   for (int i = 0; i < arrayPlayers.length; i++)
@@ -127,201 +118,17 @@ void draw()
     {
     } else
     {
-      arrayPlayers[i].drawPlayer();
+      arrayPlayers[i].drawPlayer(); // --> Pestaña PlayerClass
     }
-    arrayPlayers[i].calcCollisionBall();
-    arrayPlayers[i].jumpPlayer();
+    arrayPlayers[i].calcCollisionBall(); // --> Pestaña PlayerClass
+    arrayPlayers[i].jumpPlayer(); // --> Pestaña PlayerClass
   }
   pushMatrix();
-  translate(puntoBola.x, puntoBola.y, puntoBola.z);
+  translate(ballPos.x, ballPos.y, ballPos.z);
   if (!camera7)
     shape(ball);
   popMatrix();
 
-  drawCourt();
-  drawHUD();
-}
-
-void serveBall()
-{
-
-
-
-  switch(ballCollided)
-  {
-  case 0:
-    stroke(ballColor);
-    break;
-  case 1:
-    stroke(0, 0, 255);
-    break;
-  case 2:
-    stroke(255, 0, 0);
-    break;
-  default:
-    break;
-  }
-
-  if (initServing)
-  {
-    puntoBola =  beginCurve.calculameUnPunto(u);
-
-    if (u >= 1)
-    {
-      initServing = false;
-      u = 0;
-      iteracionDeBola = 50;
-      incrementoBolaU = 1.0 /  iteracionDeBola;
-    } else if (u > 0.65 && arrayPlayers[0].pos.y >= -(playerHeight/2) - 200)
-    {
-      arrayPlayers[0].pos.y -= 10; 
-      arrayPlayers[0].pos.z += 5;
-    } else
-    {
-      arrayPlayers[0].pos.z = puntoBola.z;
-    }
-  } else {
-    if (ballInGame)
-    {
-      if (ballCollided == 0)
-      {
-        if (arrayPlayers[0].pos.y <= -playerHeight/2)
-        {
-          arrayPlayers[0].pos.y += 10; 
-          arrayPlayers[0].pos.z += 5;
-        }
-        puntoBola =  miPrimeraBezier.calculameUnPunto(u);
-      } else if (ballCollided == 1)
-      {
-        puntoBola = blockCurve.calculameUnPunto(u);
-      } else
-      {  
-        if (auxPrevBallState == 0)
-        {
-          puntoBola =  miPrimeraBezier.calculameUnPunto(u);
-        } else
-        {
-          puntoBola = blockCurve.calculameUnPunto(u);
-        }
-        if (millis() - ballFellTime >= timeForReset)
-        {
-
-          stopServing();
-        }
-      }
-    } else
-    {
-      if (!ballSpiked)
-      {
-        puntoBola = recieveCurve.calculameUnPunto(u);
-        if (u > 0.7)
-        {
-          if (!spikerRecieve)
-            arrayPlayers[7].makeJump = true; 
-          else
-          {
-            arrayPlayers[6].makeJump = true;
-          }
-        }
-      } else
-      {
-        puntoBola = spikeCurve.calculameUnPunto(u);
-      }
-    }
-
-    if (puntoBola.y- ballSize > -ballSize)
-    {
-      puntoBola.y = -ballSize;
-      if (ballCollided != 2)
-      {
-        if (!endingComplete)
-        {
-          if ((puntoBola.x <= courtSize.x/2 && puntoBola.x >= -courtSize.x/2) && (puntoBola.z > courtPos.z && puntoBola.z <= courtSize.z/2))
-          {
-            playerWin = true;
-            println("player WINS!!!!!!");
-          } else
-          {
-            println("player Lose");
-          }
-          endingComplete = true;
-        }
-        auxPrevBallState = ballCollided;
-        ballFellTime = millis();
-        ballCollided = 2;
-      }
-    }
-    if ( puntoBola.z < 20 && puntoBola.z > -20 && puntoBola.y >= -antenaHeight && ballCollided == 0)
-    {
-      //stroke(0, 0, 255);
-      ballCollided = 1;
-      calcBlockCurve();
-      u = 0;
-    }
-    // fill(ballColor);
-  }
-  u+= incrementoBolaU;
-
-  if ( (u > 4 || ( !ballInGame && u > 1)) && !initServing) {
-    if (!ballInGame && !ballSpiked)
-    {
-      u = 0;
-      calcSpikeCurve();
-
-      ballSpiked = true;
-      iteracionDeBola = 20;
-      incrementoBolaU = 1.0 /  iteracionDeBola;
-    } else
-    {
-      stopServing();
-    }
-  }
-}
-
-
-void mouseDragged()
-{
-  if (gamePhase == Phase.SIMULATION)
-  {
-    int point = 0;
-    shouldModify = true;
-    switch(selectedPoint)
-    {
-    case DIRECCION:
-      point = 1;
-      break;
-    case EFECTO:
-      point = 2;
-      break;
-    case POTENCIA:
-      point = 3;
-      break;
-    default:
-      shouldModify = false;
-      break;
-    }
-
-    if (!mouseClick)
-    {
-      arrayPlayers[0].pos = new PVector(courtInitPos.x + 200, -playerHeight / 2, courtInitPos.z - 500);
-      resetBallPos();
-      playerWin = false;
-      endingComplete = false;
-      mouseClick = true;
-      miPrimeraBezier.lastMouseInput = new PVector(mouseX, mouseY, 0);
-    }
-    if (!freeCam && shouldModify)
-    {
-
-      miPrimeraBezier.moveControlPointsMouse(new PVector(mouseX, mouseY, 0), point);
-    }
-  }
-}
-void mouseReleased()
-{
-  if (gamePhase == Phase.SIMULATION)
-  {
-    if (mouseClick)
-      mouseClick = false;
-  }
+  drawCourt(); // --> Pestaña Terrain
+  drawHUD();  // --> Pestaña HUD
 }

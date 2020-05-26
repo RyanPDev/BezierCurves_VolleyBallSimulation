@@ -1,35 +1,32 @@
-void initGame()
+void initGame() // Funcion que actua como SetUp, inicializa todos los objetos y parametros
 {
+  
   gamePhase = Phase.SIMULATION;
-  selectedPoint = PointSelected.DIRECCION;
+  selectedPoint = PointSelected.DIRECTION;
 
   camVariables();
   loadTextures();
-
   courtVariable();
 
   lights();
 
-
-
-
   timerReset();
-
   generatePlayers();
   initCurves();
+  
   noStroke();
-  ballTexture = loadImage("ballT.png");
+  loadTextures(); 
   ball = createShape(SPHERE, ballSize);
   ball.setTexture(ballTexture);
   resetBooleans();
 }
 
-void loadTextures()
+void loadTextures() // Carga todas las texturas del juego 
 {
   ballTexture = loadImage("ballT.png");
 }
 
-void generatePlayers()
+void generatePlayers() // Inicializa y genera a todos los jugadores (aliados, enemigos y el propio player)
 {
   arrayPlayers = new Player[12];
   playerHeight = 180;
@@ -89,10 +86,8 @@ void generatePlayers()
       auxVector = new PVector(courtPos.x + ((3*(courtSize.x/2))/4), -playerHeight / 2, courtPos.z + ((3*(courtSize.z/2))/4));
       break;
     default:
-      print("error generating player " + i + "\n");
       break;
     }
-    print("generating player " + i + "\n");
     arrayPlayers[i] = new Player(
       auxVector, 
       auxType, 
@@ -102,37 +97,37 @@ void generatePlayers()
       thisIsASetter
       );
   }
-  resetBallPos();
+  resetBallPos(); 
 }
 
-void resetBooleans()
+void resetBooleans() // Resetea los booleanos
 {
   initServing = true;
   spikerRecieve = false;
   isServing = false;
   ballSpiked = false;
-  iteracionDeBola = 80;
-  incrementoBolaU = 1.0 /  iteracionDeBola;
+  ballIteration = 80;
+  ballIncrementU = 1.0 /  ballIteration;
   curveInGame = true;
   ballInGame = true;
   ballCollided = 0;
   u = 0;
 }
 
-void resetBallPos()
+void resetBallPos() // Resetea la posicion de la bola a las manos del jugador 
 {
-  puntoBola.x = arrayPlayers[0].pos.x;
-  puntoBola.y = arrayPlayers[0].pos.y;
-  puntoBola.z = arrayPlayers[0].pos.z + playerWidthZ + ballSize;
+  ballPos.x = arrayPlayers[0].pos.x;
+  ballPos.y = arrayPlayers[0].pos.y;
+  ballPos.z = arrayPlayers[0].pos.z + playerWidthZ + ballSize;
 }
 
-void timerReset()
+void timerReset() // Inicializa el timer
 {
   timeForReset = 200;
   ballFellTime = 0;
 }
 
-void camVariables()
+void camVariables() // Inicializa todo lo relacionado con la camara
 {
   // Cámara
   cam = new PeasyCam(this, 2800);
@@ -143,10 +138,10 @@ void camVariables()
 
   animationTimeInMillis = 1000;
 
-  cameraPhase = CamPhase.COURT;
+
 }
 
-void courtVariable()
+void courtVariable() // Inicializa las variables que se usar para definir posiciones clave de la cancha
 {
   courtPos = new PVector(0, 0, 0);
   floorSize = new PVector(0, 0, 0); 
@@ -170,11 +165,11 @@ void courtVariable()
   netScale = 26;
 }
 
-void initCurves()
+void initCurves() // Inicializa todas las curvas (que no significa darles valores)
 {
 
   beginCurve = new InterpolCurve(color(30));
-  calcFirstCurve();
+  calcFirstCurve(); //--> Pestaña CalculationFunctions
 
   destinationSpike = new PVector(0, 0, 0);
   destinationSpike = new PVector(courtPos.x - ((3*(courtSize.x/2))/4), 100, courtPos.z - ((3*(courtSize.z/2))/4));
@@ -192,9 +187,9 @@ void initCurves()
   // PUNTOS A PINTAR?
   float num = 50;
   // LLAMADA AL CONSTRUCTOR DE LA CURVA
-  miPrimeraBezier = new curvaBezier(p, c, num);
+  serveCurve = new BezierCurve(p, c, num);
 
-  miPrimeraBezier.rearrangePoints();    
+  serveCurve.rearrangePoints();  //--> Pestaña BezierClass  
 
   recieveCurve = new InterpolCurve(color(199, 21, 133));
 }
